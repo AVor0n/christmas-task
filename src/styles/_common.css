@@ -1,4 +1,14 @@
-a{
+:root {
+  font-size: 10px;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  font-size: 1.6rem;
+}
+
+a {
   color: var(--font-color);
   text-decoration: none;
 }
@@ -8,7 +18,17 @@ a:focus,
 a:active {
   /* color: var(--accent-color); */
   outline: none;
-  filter: invert(25%) sepia(35%) saturate(3885%) hue-rotate(8deg) brightness(99%) contrast(89%)
+  filter: invert(25%) sepia(35%) saturate(3885%) hue-rotate(8deg) brightness(99%) contrast(89%);
+}
+
+.glass-effect {
+  background: radial-gradient(
+    118.88% 606.86% at 0% 0%,
+    rgb(36 197 219 / 15%) 0%,
+    rgb(36 197 219 / 0%) 100%
+  );
+  border: 2px solid #24C5DB;
+  backdrop-filter: blur(31px);
 }
 
 /*
