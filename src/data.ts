@@ -1,6 +1,6 @@
 const data: Array<toyInfo> = [
   {
-    num: 1,
+    id: '1',
     name: 'Большой шар с рисунком',
     count: 2,
     year: 1960,
@@ -10,7 +10,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 2,
+    id: '2',
     name: 'Зелёный шар с цветами',
     count: 5,
     year: 2000,
@@ -20,7 +20,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 3,
+    id: '3',
     name: 'Красный матовый шар',
     count: 3,
     year: 1990,
@@ -30,7 +30,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 4,
+    id: '4',
     name: 'Сосулька красная',
     count: 2,
     year: 1980,
@@ -40,7 +40,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 5,
+    id: '5',
     name: 'Красный виноград',
     count: 4,
     year: 1980,
@@ -50,7 +50,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 6,
+    id: '6',
     name: 'Красный шар с рисунком',
     count: 6,
     year: 2010,
@@ -60,7 +60,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 7,
+    id: '7',
     name: 'Молочно-белый шар',
     count: 12,
     year: 1960,
@@ -70,7 +70,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 8,
+    id: '8',
     name: 'Красный шар',
     count: 10,
     year: 2010,
@@ -80,7 +80,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 9,
+    id: '9',
     name: 'Колокольчик старинный',
     count: 2,
     year: 1950,
@@ -90,7 +90,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 10,
+    id: '10',
     name: 'Белый шар ретро',
     count: 7,
     year: 1960,
@@ -100,7 +100,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 11,
+    id: '11',
     name: 'Шишка еловая белая',
     count: 11,
     year: 1960,
@@ -110,7 +110,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 12,
+    id: '12',
     name: 'Белый шар с цветами',
     count: 5,
     year: 1980,
@@ -120,7 +120,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 13,
+    id: '13',
     name: 'Шар расписной Река',
     count: 3,
     year: 1970,
@@ -130,7 +130,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 14,
+    id: '14',
     name: 'Шар расписной Деревня',
     count: 4,
     year: 1970,
@@ -140,7 +140,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 15,
+    id: '15',
     name: 'Колокольчик расписной',
     count: 3,
     year: 1970,
@@ -150,7 +150,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 16,
+    id: '16',
     name: 'Шишка расписная Пейзаж',
     count: 3,
     year: 1970,
@@ -160,7 +160,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 17,
+    id: '17',
     name: 'Шишка расписная',
     count: 7,
     year: 1970,
@@ -170,7 +170,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 18,
+    id: '18',
     name: 'Желтый шар с бантом',
     count: 2,
     year: 2010,
@@ -180,7 +180,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 19,
+    id: '19',
     name: 'Желтый шар с паетками',
     count: 12,
     year: 1980,
@@ -190,7 +190,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 20,
+    id: '20',
     name: 'Красный шар с бантом',
     count: 8,
     year: 1950,
@@ -200,7 +200,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 21,
+    id: '21',
     name: 'Красный шар с звёздами',
     count: 4,
     year: 1970,
@@ -210,7 +210,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 22,
+    id: '22',
     name: 'Шишка еловая золотая',
     count: 11,
     year: 1990,
@@ -220,7 +220,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 23,
+    id: '23',
     name: 'Колокольчик старинный',
     count: 9,
     year: 1950,
@@ -230,7 +230,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 24,
+    id: '24',
     name: 'Снежинка изящная',
     count: 1,
     year: 1940,
@@ -240,7 +240,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 25,
+    id: '25',
     name: 'Розовый шар с блёстками',
     count: 12,
     year: 2010,
@@ -250,7 +250,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 26,
+    id: '26',
     name: 'Рубиново-золотой шар',
     count: 8,
     year: 1960,
@@ -260,7 +260,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 27,
+    id: '27',
     name: 'Красный шар с узором',
     count: 4,
     year: 2010,
@@ -270,7 +270,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 28,
+    id: '28',
     name: 'Бордовый шар с узором',
     count: 10,
     year: 2010,
@@ -280,7 +280,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 29,
+    id: '29',
     name: 'Старинный шар с цветами',
     count: 5,
     year: 1950,
@@ -290,7 +290,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 30,
+    id: '30',
     name: 'Старинный шар с узором',
     count: 8,
     year: 1950,
@@ -300,7 +300,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 31,
+    id: '31',
     name: 'Красный шар с блёстками',
     count: 8,
     year: 2010,
@@ -310,7 +310,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 32,
+    id: '32',
     name: 'Синий шар Вселенная',
     count: 11,
     year: 1970,
@@ -320,7 +320,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 33,
+    id: '33',
     name: 'Синий шар со снежинкой',
     count: 6,
     year: 2010,
@@ -330,7 +330,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 34,
+    id: '34',
     name: 'Зелёный  шар с узором',
     count: 8,
     year: 2010,
@@ -340,7 +340,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 35,
+    id: '35',
     name: 'Фигурка Лис в шарфе',
     count: 8,
     year: 1950,
@@ -350,7 +350,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 36,
+    id: '36',
     name: 'Сиреневый шар Метель',
     count: 1,
     year: 2000,
@@ -360,7 +360,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 37,
+    id: '37',
     name: 'Зелёный  шар Метель',
     count: 6,
     year: 2000,
@@ -370,7 +370,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 38,
+    id: '38',
     name: 'Голубой  шар Метель',
     count: 6,
     year: 2000,
@@ -380,7 +380,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 39,
+    id: '39',
     name: 'Красная снежинка',
     count: 6,
     year: 1990,
@@ -390,7 +390,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 40,
+    id: '40',
     name: 'Снежинка золотая',
     count: 12,
     year: 2020,
@@ -400,7 +400,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 41,
+    id: '41',
     name: 'Снежинка арктическая',
     count: 11,
     year: 2020,
@@ -410,7 +410,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 42,
+    id: '42',
     name: 'Зелёный шар',
     count: 10,
     year: 1980,
@@ -420,7 +420,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 43,
+    id: '43',
     name: 'Снежинка двухцветная',
     count: 6,
     year: 1960,
@@ -430,7 +430,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 44,
+    id: '44',
     name: 'Фигурка Ангела',
     count: 11,
     year: 1940,
@@ -440,7 +440,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 45,
+    id: '45',
     name: 'Снежинка новогодняя',
     count: 1,
     year: 1980,
@@ -450,7 +450,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 46,
+    id: '46',
     name: 'Фигурка Мухомор',
     count: 10,
     year: 1950,
@@ -460,7 +460,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 47,
+    id: '47',
     name: 'Фигурка Колодец',
     count: 6,
     year: 1950,
@@ -470,7 +470,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 48,
+    id: '48',
     name: 'Желтый шар с бантом',
     count: 6,
     year: 1960,
@@ -480,7 +480,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 49,
+    id: '49',
     name: 'Снежинка с бирюзой',
     count: 4,
     year: 1980,
@@ -490,7 +490,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 50,
+    id: '50',
     name: 'Колокольчик большой',
     count: 3,
     year: 2020,
@@ -500,7 +500,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 51,
+    id: '51',
     name: 'Шишка с изморозью',
     count: 12,
     year: 1970,
@@ -510,7 +510,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 52,
+    id: '52',
     name: 'Красный шар с надписью',
     count: 12,
     year: 1990,
@@ -520,7 +520,7 @@ const data: Array<toyInfo> = [
     favorite: true,
   },
   {
-    num: 53,
+    id: '53',
     name: 'Снежинка серебристая',
     count: 6,
     year: 2020,
@@ -530,7 +530,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 54,
+    id: '54',
     name: 'Зелёный шар с рисунком',
     count: 6,
     year: 2010,
@@ -540,7 +540,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 55,
+    id: '55',
     name: 'Пряничный домик',
     count: 1,
     year: 1940,
@@ -550,7 +550,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 56,
+    id: '56',
     name: 'Пряничный теремок',
     count: 1,
     year: 1940,
@@ -560,7 +560,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 57,
+    id: '57',
     name: 'Пряничная избушка',
     count: 1,
     year: 1940,
@@ -570,7 +570,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 58,
+    id: '58',
     name: 'Фигурка белого медведя',
     count: 2,
     year: 1980,
@@ -580,7 +580,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 59,
+    id: '59',
     name: 'Желтый шар с надписью',
     count: 10,
     year: 1990,
@@ -590,7 +590,7 @@ const data: Array<toyInfo> = [
     favorite: false,
   },
   {
-    num: 60,
+    id: '60',
     name: 'Фигурка Голубь',
     count: 12,
     year: 1940,
