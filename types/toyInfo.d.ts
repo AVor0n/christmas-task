@@ -1,5 +1,5 @@
 type toyInfo = {
-  num: number;
+  id: string;
   name: string;
   count: number;
   year: number;
