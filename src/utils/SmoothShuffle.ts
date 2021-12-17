@@ -73,11 +73,11 @@ class SmoothShuffle<T extends DataItem> {
   update(data: Array<T>) {
     const newIdx = data.map((x) => x.id);
     for (const item of this.items) {
-      if (!newIdx.includes(item.textContent)) SmoothShuffle.#hideItem(item);
+      if (!newIdx.includes(item.id)) SmoothShuffle.#hideItem(item);
     }
-    this.items = this.items.filter((item) => newIdx.includes(item.textContent));
+    this.items = this.items.filter((item) => newIdx.includes(item.id));
     for (let i = 0; i < newIdx.length; i++) {
-      let item = this.items.find((x) => x.textContent === newIdx[i]);
+      let item = this.items.find((x) => x.id === newIdx[i]);
       if (item) this.#moveItem(item, i);
       else {
         item = this.#createItem(data[i], i);
