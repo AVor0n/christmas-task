@@ -1,0 +1,12 @@
+.header {
+  background-color: var(--background-color);
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+}
+
+.nav__list-item {
+  margin: 1rem;
+}

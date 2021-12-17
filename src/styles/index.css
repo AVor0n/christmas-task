@@ -1,0 +1,7 @@
+@import './reset.css';
+
+@import './_colors.css';
+@import './_common.css';
+
+@import './_header.css';
+@import './_footer.css';

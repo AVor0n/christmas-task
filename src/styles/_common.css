@@ -1,0 +1,17 @@
+a{
+  color: var(--font-color);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus,
+a:active {
+  /* color: var(--accent-color); */
+  outline: none;
+  filter: invert(25%) sepia(35%) saturate(3885%) hue-rotate(8deg) brightness(99%) contrast(89%)
+}
+
+/*
+a > img:hover{
+  filter: invert(57%) sepia(100%) saturate(329%) hue-rotate(5deg) brightness(99%) contrast(92%);
+} */

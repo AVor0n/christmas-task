@@ -7,6 +7,6 @@ const router = new Router();
 router.add('', () => goToPage(startPage));
 
 function goToPage(pageContent: string, pageController?: () => void) {
-  document.body.innerHTML = pageContent;
+  document.querySelector('.main').innerHTML = pageContent;
   if (pageController) pageController();
 }
