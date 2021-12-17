@@ -8,7 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "lint:ts": "eslint ./src --ext .ts",
+    "fix:ts": "eslint ./src --ext .ts --fix",
+    "lint:style": "stylelint ./src/styles/",
+    "fix:style": "stylelint ./src/styles/ --fix"
   },
   "author": "Andrey Voronin",
   "license": "ISC",

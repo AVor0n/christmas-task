@@ -24,6 +24,8 @@ module.exports = {
       },
     ],
     'declaration-empty-line-before': null, //конфликтует с rational-order
+    'selector-class-pattern':
+      '^[a-z]+(-[a-z0-9]+)*(__[a-z]+(-[a-z0-9]+)*)?(--[a-z]+(-[a-z0-9]+)*)?(:{1,2}.+)?$',
   },
   ignoreFiles: ['**/reset.css'],
 };
