@@ -218,7 +218,7 @@ function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
   let data = toyData.slice();
 
   if (filter.name) {
-    const regex = new RegExp(filter.name);
+    const regex = new RegExp(filter.name, 'i');
     data = data.filter((toy) => regex.test(toy.name));
   }
 
