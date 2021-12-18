@@ -111,7 +111,15 @@ function toysPageController() {
 
   const container: HTMLDivElement = document.querySelector('.toys__container');
   let actualToysData: Array<toyInfo> = applySort(sort, toysData);
-  const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(container, toysData, toyCreator);
+  const placeholder = document.createElement('p');
+  placeholder.className = 'toys__placeholder glass-effect';
+  placeholder.innerHTML = 'Совпадений не найденно. <br>Попробуйте другую комбинацию фильтров';
+  const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(
+    container,
+    toysData,
+    toyCreator,
+    placeholder,
+  );
 
   searchInp.focus();
   //* * ---------- Обработчики -----------------------------

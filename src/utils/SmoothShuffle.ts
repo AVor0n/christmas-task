@@ -15,10 +15,17 @@ class SmoothShuffle<T extends DataItem> {
   gapY: number;
   items: Array<HTMLDivElement>;
   itemCreator: ItemCreator;
+  placeHolder: HTMLElement;
 
-  constructor(container: HTMLDivElement, data: Array<T>, itemCreator: ItemCreator) {
+  constructor(
+    container: HTMLDivElement,
+    data: Array<T>,
+    itemCreator: ItemCreator,
+    placeHolder: HTMLElement,
+  ) {
     this.container = container;
     this.itemCreator = itemCreator;
+    this.placeHolder = placeHolder;
 
     this.getItemInfo(data[0]);
     this.getGridInfo();
@@ -72,9 +79,27 @@ class SmoothShuffle<T extends DataItem> {
 
   update(data: Array<T>) {
     const newIdx = data.map((x) => x.id);
-    for (const item of this.items) {
-      if (!newIdx.includes(item.id)) SmoothShuffle.#hideItem(item);
+
+    this.items = this.items.filter((item) => {
+      if (!newIdx.includes(item.id)) {
+        SmoothShuffle.#hideItem(item);
+        setTimeout(() => item.remove(), 600);
+        return false;
+      }
+      return true;
+    });
+
+    if (data.length === 0) {
+      if (this.placeHolder.parentElement) return;
+      this.container.appendChild(this.placeHolder);
+      this.container.style.height = '80vh';
+      return;
     }
+
+    if (this.placeHolder.parentElement) {
+      this.container.removeChild(this.placeHolder);
+    }
+
     this.items = this.items.filter((item) => newIdx.includes(item.id));
     for (let i = 0; i < newIdx.length; i++) {
       let item = this.items.find((x) => x.id === newIdx[i]);
