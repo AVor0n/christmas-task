@@ -67,7 +67,7 @@
 }
 
 .filter-count__slider,
-.filter-year__slider{
+.filter-year__slider {
   margin: 10px;
 }
 
@@ -171,4 +171,15 @@
 
 .noUi-active .noUi-tooltip {
   display: block;
+}
+
+.filters__search::-webkit-search-cancel-button {
+  width: 16px;
+  height: 16px;
+  background-image: url('../assets/svg/close.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+  appearance: none;
 }

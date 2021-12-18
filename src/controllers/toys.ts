@@ -113,6 +113,7 @@ function toysPageController() {
   let actualToysData: Array<toyInfo> = applySort(sort, toysData);
   const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(container, toysData, toyCreator);
 
+  searchInp.focus();
   //* * ---------- Обработчики -----------------------------
 
   sortSelect.addEventListener('change', () => {
