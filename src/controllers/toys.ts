@@ -36,7 +36,8 @@ function toysPageController() {
   const yearSlider: Instanse = document.querySelector('.filter-year__slider');
   const sizeBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.filter-size__option');
   const favoriteBtn: HTMLButtonElement = document.querySelector('.filter-favorite__option');
-  const resetBtn: HTMLButtonElement = document.querySelector('.reset-filter');
+  const resetFilter: HTMLButtonElement = document.querySelector('.reset-filter');
+  const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
   const searchInp: HTMLInputElement = document.querySelector('.filters__search');
 
   let maxYear = -Infinity;
@@ -88,7 +89,7 @@ function toysPageController() {
 
   let timerId: NodeJS.Timeout;
 
-  let filter: Filter = {
+  const defaultFilter: Filter = {
     name: '',
     count: {
       from: minCount,
@@ -104,19 +105,23 @@ function toysPageController() {
     favorite: false,
   };
 
-  const sort: Sort = {
+  let filter: Filter = localStorage.getItem('filter')
+    ? JSON.parse(localStorage.getItem('filter'))
+    : defaultFilter;
+
+  const sort: Sort = JSON.parse(localStorage.getItem('sort')) || {
     prop: 'name',
     direction: 'up',
   };
 
   const container: HTMLDivElement = document.querySelector('.toys__container');
-  let actualToysData: Array<toyInfo> = applySort(sort, toysData);
+  let actualToysData: Array<toyInfo> = applySort(sort, applyFilter(filter, toysData));
   const placeholder = document.createElement('p');
   placeholder.className = 'toys__placeholder glass-effect';
   placeholder.innerHTML = 'Совпадений не найденно. <br>Попробуйте другую комбинацию фильтров';
   const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(
     container,
-    toysData,
+    actualToysData,
     toyCreator,
     placeholder,
   );
@@ -194,29 +199,21 @@ function toysPageController() {
     updateToysView();
   });
 
-  resetBtn.addEventListener('click', () => {
-    filter = {
-      name: '',
-      count: {
-        from: minCount,
-        to: maxCount,
-      },
-      year: {
-        from: minYear,
-        to: maxYear,
-      },
-      shape: [],
-      color: [],
-      size: [],
-      favorite: false,
-    };
+  resetFilter.addEventListener('click', () => {
+    filter = defaultFilter;
     yearSlider.noUiSlider.reset();
     countSlider.noUiSlider.reset();
     updateToysView();
   });
 
+  resetSettings.addEventListener('click', () => {
+    localStorage.clear();
+  });
+
   function updateToysView() {
     clearTimeout(timerId);
+    localStorage.setItem('filter', JSON.stringify(filter));
+    localStorage.setItem('sort', JSON.stringify(sort));
     actualToysData = applyFilter(filter, toysData);
     actualToysData = applySort(sort, actualToysData);
     timerId = setTimeout(() => ss.update(actualToysData), 500);
