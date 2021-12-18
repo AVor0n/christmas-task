@@ -201,6 +201,8 @@ function toysPageController() {
       size: [],
       favorite: false,
     };
+    yearSlider.noUiSlider.reset();
+    countSlider.noUiSlider.reset();
     updateToysView();
   });
 
