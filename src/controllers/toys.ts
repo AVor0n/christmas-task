@@ -17,13 +17,17 @@ type Filter = {
   size: Array<toySize>;
   favorite: boolean;
 };
+
+type Sort = {
+  prop: 'name' | 'year' | 'count';
+  direction: 'up' | 'down';
+};
 interface Instanse extends HTMLElement {
   noUiSlider: API;
 }
 
 function toysPageController() {
-  const container: HTMLDivElement = document.querySelector('.toys__container');
-  const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(container, toysData, toyCreator);
+  const sortSelect = document.getElementById('sortBy') as HTMLSelectElement;
   const shapeBtns: NodeListOf<HTMLButtonElement> =
     document.querySelectorAll('.filter-form__option');
   const colorBtns: NodeListOf<HTMLButtonElement> =
@@ -99,6 +103,24 @@ function toysPageController() {
     size: [],
     favorite: false,
   };
+
+  const sort: Sort = {
+    prop: 'name',
+    direction: 'up',
+  };
+
+  const container: HTMLDivElement = document.querySelector('.toys__container');
+  let actualToysData: Array<toyInfo> = applySort(sort, toysData);
+  const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(container, toysData, toyCreator);
+
+  //* * ---------- Обработчики -----------------------------
+
+  sortSelect.addEventListener('change', () => {
+    const [sortProp, sortDirecttion] = sortSelect.value.split('-');
+    sort.direction = sortDirecttion as 'up' | 'down';
+    sort.prop = sortProp as 'year' | 'count' | 'name';
+    updateToysView();
+  });
 
   searchInp.addEventListener('input', () => {
     filter.name = searchInp.value;
@@ -184,9 +206,9 @@ function toysPageController() {
 
   function updateToysView() {
     clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      ss.update(applyFilter(filter, toysData));
-    }, 500);
+    actualToysData = applyFilter(filter, toysData);
+    actualToysData = applySort(sort, actualToysData);
+    timerId = setTimeout(() => ss.update(actualToysData), 500);
   }
 }
 
@@ -223,6 +245,24 @@ function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
   }
 
   return data;
+}
+
+function applySort(sort: Sort, toyData: Array<toyInfo>) {
+  const collator = new Intl.Collator('ru');
+
+  if (sort.direction === 'up') {
+    if (sort.prop === 'name') toyData.sort((toy1, toy2) => collator.compare(toy1.name, toy2.name));
+    if (sort.prop === 'year') toyData.sort((toy1, toy2) => toy1.year - toy2.year);
+    if (sort.prop === 'count') toyData.sort((toy1, toy2) => toy1.count - toy2.count);
+  }
+
+  if (sort.direction === 'down') {
+    if (sort.prop === 'name') toyData.sort((toy1, toy2) => collator.compare(toy2.name, toy1.name));
+    if (sort.prop === 'year') toyData.sort((toy1, toy2) => toy2.year - toy1.year);
+    if (sort.prop === 'count') toyData.sort((toy1, toy2) => toy2.count - toy1.count);
+  }
+
+  return toyData;
 }
 
 function toyCreator(toyData: toyInfo) {
