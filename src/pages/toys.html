@@ -17,23 +17,23 @@
       <h3 class="filter-form__title">Форма</h3>
       <div class="filter-form__options">
         <button class="filter-form__option button" data-value="колокольчик">
-          <img src="../assets/svg/bell.svg" width="42" height="42" alt="">
+          <img src="../assets/svg/bell.svg" width="30" height="30" alt="">
           Колокол
         </button>
         <button class="filter-form__option button" data-value="шар">
-          <img src="../assets/svg/ball.svg" width="42" height="42" alt="">
+          <img src="../assets/svg/ball.svg" width="30" height="30" alt="">
           Шар
         </button>
         <button class="filter-form__option button" data-value="шишка">
-          <img src="../assets/svg/cone.svg" width="42" height="42" alt="">
+          <img src="../assets/svg/cone.svg" width="30" height="30" alt="">
           Шишка
         </button>
         <button class="filter-form__option button" data-value="снежинка">
-          <img src="../assets/svg/snowflake.svg" width="42" height="42" alt="">
+          <img src="../assets/svg/snowflake.svg" width="30" height="30" alt="">
           Снежинка
         </button>
         <button class="filter-form__option button" data-value="фигурка">
-          <img src="../assets/svg/toy.svg" width="42" height="42" alt="">
+          <img src="../assets/svg/toy.svg" width="30" height="30" alt="">
           Фигурка
         </button>
       </div>
@@ -42,29 +42,37 @@
     <div class="filter-count">
       <h3 class="filter-count__title">Количество экземпляров</h3>
       <div class="filter-count__slider"></div>
+      <div class="filter-count__labels">
+        <span class="filter-count__label filter-count__min-label">NaN</span>
+        <span class="filter-count__label filter-count__max-label">NaN</span>
+      </div>
     </div>
 
     <div class="filter-year">
       <h3 class="filter-year__title">Год приобретения</h3>
       <div class="filter-year__slider"></div>
+      <div class="filter-year__labels">
+        <span class="filter-year__label filter-year__min-label">NaN</span>
+        <span class="filter-year__label filter-year__max-label">NaN</span>
+      </div>
     </div>
 
     <div class="filter-color">
       <h3 class="filter-color__title">Цвет</h3>
       <div class="filter-color__options">
-        <button class="button filter-color__option">
+        <button class="button filter-color__option" data-value="белый">
           <div style="height: 24px; width: 24px; background-color: white;"></div>Белый
         </button>
-        <button class="button filter-color__option">
+        <button class="button filter-color__option" data-value="желтый">
           <div style="height: 24px; width: 24px; background-color: yellow;"></div>Желтый
         </button>
-        <button class="button filter-color__option">
+        <button class="button filter-color__option" data-value="красный">
           <div style="height: 24px; width: 24px; background-color: red;"></div>Красный
         </button>
-        <button class="button filter-color__option">
+        <button class="button filter-color__option" data-value="синий">
           <div style="height: 24px; width: 24px; background-color: blue;"></div>Синий
         </button>
-        <button class="button filter-color__option">
+        <button class="button filter-color__option" data-value="зеленый">
           <div style="height: 24px; width: 24px; background-color: green;"></div>Зеленый
         </button>
       </div>
@@ -73,23 +81,26 @@
     <div class="filter-size">
       <h3 class="filter-size__title">Размер</h3>
       <div class="filter-size__options">
-        <input class="hiden" type="checkbox" name="favorite" id="filter-size-big">
-        <label class="filter-size__option button" for="filter-size-big">Большой</label>
-        <input class="hiden" type="checkbox" name="favorite" id="filter-size-medium">
-        <label class="filter-size__option button" for="filter-size-medium">Средний</label>
-        <input class="hiden" type="checkbox" name="favorite" id="filter-size-small">
-        <label class="filter-size__option button" for="filter-size-small">Малый</label>
+        <input class="filter-size__option hiden" data-value="большой" type="checkbox" name="favorite"
+          id="filter-size-big">
+        <label class="button" for="filter-size-big">Большой</label>
+        <input class="filter-size__option hiden" data-value="средний" type="checkbox" name="favorite"
+          id="filter-size-medium">
+        <label class="button" for="filter-size-medium">Средний</label>
+        <input class="filter-size__option hiden" data-value="малый" type="checkbox" name="favorite"
+          id="filter-size-small">
+        <label class="button" for="filter-size-small">Малый</label>
       </div>
     </div>
 
     <div class="filter-favorite">
-      <input class="hiden" type="checkbox" name="favorite" id="filter-favorite">
-      <label class="filter-favorite__option button" for="filter-favorite">Только любимые</label>
+      <input class="filter-favorite__option hiden" type="checkbox" name="favorite" id="filter-favorite">
+      <label class="button" for="filter-favorite">Только любимые</label>
     </div>
 
     <div class="filters__reset">
-      <button class="btn button">Сбросить фильтры</button>
-      <button class="btn button">Сбросить настройки</button>
+      <button class="reset-filter btn button">Сбросить фильтры</button>
+      <button class="reset-settings btn button">Сбросить настройки</button>
     </div>
   </div>
   <div class="toys__container">

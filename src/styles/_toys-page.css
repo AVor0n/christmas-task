@@ -14,7 +14,7 @@
 .toys__filters {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   height: min-content;
   margin: 15px;
   margin-bottom: 80px;
@@ -64,6 +64,18 @@
 .filter-sort__title {
   font-weight: 400;
   font-size: 2rem;
+}
+
+.filter-count__slider,
+.filter-year__slider{
+  margin: 10px;
+}
+
+.filter-year__labels,
+.filter-count__labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .filter-form__title,
@@ -151,4 +163,12 @@
 .toy__size,
 .toy__favorite {
   text-align: right;
+}
+
+.noUi-tooltip {
+  display: none;
+}
+
+.noUi-active .noUi-tooltip {
+  display: block;
 }

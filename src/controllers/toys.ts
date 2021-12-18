@@ -1,9 +1,228 @@
+/* eslint-disable no-loop-func */
+import noUiSlider, { API } from 'nouislider';
 import SmoothShuffle from '../utils/SmoothShuffle';
 import toysData from '../data';
+
+type Range = {
+  from: number;
+  to: number;
+};
+
+type Filter = {
+  name: string;
+  count: Range;
+  year: Range;
+  shape: Array<toyShape>;
+  color: Array<toyColor>;
+  size: Array<toySize>;
+  favorite: boolean;
+};
+interface Instanse extends HTMLElement {
+  noUiSlider: API;
+}
 
 function toysPageController() {
   const container: HTMLDivElement = document.querySelector('.toys__container');
   const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(container, toysData, toyCreator);
+  const shapeBtns: NodeListOf<HTMLButtonElement> =
+    document.querySelectorAll('.filter-form__option');
+  const colorBtns: NodeListOf<HTMLButtonElement> =
+    document.querySelectorAll('.filter-color__option');
+  const countSlider: Instanse = document.querySelector('.filter-count__slider');
+  const yearSlider: Instanse = document.querySelector('.filter-year__slider');
+  const sizeBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.filter-size__option');
+  const favoriteBtn: HTMLButtonElement = document.querySelector('.filter-favorite__option');
+  const resetBtn: HTMLButtonElement = document.querySelector('.reset-filter');
+  const searchInp: HTMLInputElement = document.querySelector('.filters__search');
+
+  let maxYear = -Infinity;
+  let minYear = +Infinity;
+  let maxCount = -Infinity;
+  let minCount = +Infinity;
+
+  for (const toy of toysData) {
+    if (toy.year > maxYear) maxYear = toy.year;
+    if (toy.year < minYear) minYear = toy.year;
+    if (toy.count > maxCount) maxCount = toy.count;
+    if (toy.count < minCount) minCount = toy.count;
+  }
+
+  document.querySelector('.filter-count__max-label').textContent = `${maxCount}`;
+  document.querySelector('.filter-count__min-label').textContent = `${minCount}`;
+  document.querySelector('.filter-year__max-label').textContent = `${maxYear}`;
+  document.querySelector('.filter-year__min-label').textContent = `${minYear}`;
+
+  noUiSlider.create(countSlider, {
+    start: [minCount, maxCount],
+    connect: true,
+    tooltips: [true, true],
+    format: {
+      to: (value) => `${Math.floor(value)}`,
+      from: (value) => Math.floor(+value),
+    },
+    range: {
+      min: minCount,
+      max: maxCount,
+    },
+    step: 1,
+  });
+
+  noUiSlider.create(yearSlider, {
+    start: [minYear, maxYear],
+    connect: true,
+    range: {
+      min: minYear,
+      max: maxYear,
+    },
+    tooltips: [true, true],
+    format: {
+      to: (value) => `${Math.floor(value)}`,
+      from: (value) => Math.floor(+value),
+    },
+    step: 1,
+  });
+
+  let timerId: NodeJS.Timeout;
+
+  let filter: Filter = {
+    name: '',
+    count: {
+      from: minCount,
+      to: maxCount,
+    },
+    year: {
+      from: minYear,
+      to: maxYear,
+    },
+    shape: [],
+    color: [],
+    size: [],
+    favorite: false,
+  };
+
+  searchInp.addEventListener('input', () => {
+    filter.name = searchInp.value;
+    updateToysView();
+  });
+
+  countSlider.noUiSlider.on('set', () => {
+    const sliderValues = countSlider.noUiSlider.get() as Array<string>;
+    filter.count.from = +sliderValues[0];
+    filter.count.to = +sliderValues[1];
+    updateToysView();
+  });
+
+  yearSlider.noUiSlider.on('set', () => {
+    const sliderValues = yearSlider.noUiSlider.get() as Array<string>;
+    filter.year.from = +sliderValues[0];
+    filter.year.to = +sliderValues[1];
+    updateToysView();
+  });
+
+  for (const shapeBtn of shapeBtns) {
+    shapeBtn.addEventListener('click', () => {
+      const shapeValue = shapeBtn.dataset.value as toyShape;
+
+      const i = filter.shape.indexOf(shapeValue);
+
+      if (i === -1) filter.shape.push(shapeValue);
+      else filter.shape.splice(i, 1);
+
+      updateToysView();
+    });
+  }
+
+  for (const colorBtn of colorBtns) {
+    colorBtn.addEventListener('click', () => {
+      const colorValue = colorBtn.dataset.value as toyColor;
+
+      const i = filter.color.indexOf(colorValue);
+
+      if (i === -1) filter.color.push(colorValue);
+      else filter.color.splice(i, 1);
+
+      updateToysView();
+    });
+  }
+
+  for (const sizeBtn of sizeBtns) {
+    sizeBtn.addEventListener('click', () => {
+      const sizeValue = sizeBtn.dataset.value as toySize;
+
+      const i = filter.size.indexOf(sizeValue);
+
+      if (i === -1) filter.size.push(sizeValue);
+      else filter.size.splice(i, 1);
+
+      updateToysView();
+    });
+  }
+
+  favoriteBtn.addEventListener('click', () => {
+    filter.favorite = !filter.favorite;
+    updateToysView();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    filter = {
+      name: '',
+      count: {
+        from: minCount,
+        to: maxCount,
+      },
+      year: {
+        from: minYear,
+        to: maxYear,
+      },
+      shape: [],
+      color: [],
+      size: [],
+      favorite: false,
+    };
+    updateToysView();
+  });
+
+  function updateToysView() {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      ss.update(applyFilter(filter, toysData));
+    }, 500);
+  }
+}
+
+function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
+  let data = toyData.slice();
+
+  if (filter.name) {
+    const regex = new RegExp(filter.name);
+    data = data.filter((toy) => regex.test(toy.name));
+  }
+
+  if (filter.count) {
+    data = data.filter((toy) => filter.count.from <= toy.count && toy.count <= filter.count.to);
+  }
+
+  if (filter.year) {
+    data = data.filter((toy) => filter.year.from <= toy.year && toy.year <= filter.year.to);
+  }
+
+  if (filter.color.length) {
+    data = data.filter((toy) => filter.color.includes(toy.color));
+  }
+
+  if (filter.shape.length) {
+    data = data.filter((toy) => filter.shape.includes(toy.shape));
+  }
+
+  if (filter.size.length) {
+    data = data.filter((toy) => filter.size.includes(toy.size));
+  }
+
+  if (filter.favorite) {
+    data = data.filter((toy) => toy.favorite);
+  }
+
+  return data;
 }
 
 function toyCreator(toyData: toyInfo) {
