@@ -28,16 +28,16 @@ interface Instanse extends HTMLElement {
 
 function toysPageController() {
   const sortSelect = document.getElementById('sortBy') as HTMLSelectElement;
-  const shapeBtns: NodeListOf<HTMLButtonElement> =
-    document.querySelectorAll('.filter-form__option');
-  const colorBtns: NodeListOf<HTMLButtonElement> =
+  const shapeBtns: NodeListOf<HTMLInputElement> =
+    document.querySelectorAll('.filter-shape__option');
+  const colorBtns: NodeListOf<HTMLInputElement> =
     document.querySelectorAll('.filter-color__option');
   const countSlider: Instanse = document.querySelector('.filter-count__slider');
   const yearSlider: Instanse = document.querySelector('.filter-year__slider');
-  const sizeBtns: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.filter-size__option');
-  const favoriteBtn: HTMLButtonElement = document.querySelector('.filter-favorite__option');
+  const sizeBtns: NodeListOf<HTMLInputElement> = document.querySelectorAll('.filter-size__option');
+  const favoriteBtn: HTMLInputElement = document.querySelector('.filter-favorite__option');
   const resetFilter: HTMLButtonElement = document.querySelector('.reset-filter');
-  const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
+  // const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
   const searchInp: HTMLInputElement = document.querySelector('.filters__search');
 
   let maxYear = -Infinity;
@@ -200,15 +200,34 @@ function toysPageController() {
   });
 
   resetFilter.addEventListener('click', () => {
-    filter = defaultFilter;
+    filter = {
+      name: '',
+      count: {
+        from: minCount,
+        to: maxCount,
+      },
+      year: {
+        from: minYear,
+        to: maxYear,
+      },
+      shape: [],
+      color: [],
+      size: [],
+      favorite: false,
+    };
     yearSlider.noUiSlider.reset();
     countSlider.noUiSlider.reset();
+    for (const colorBtn of colorBtns) colorBtn.checked = false;
+    for (const shapeBtn of shapeBtns) shapeBtn.checked = false;
+    for (const sizeBtn of sizeBtns) sizeBtn.checked = false;
+    favoriteBtn.checked = false;
+
     updateToysView();
   });
 
-  resetSettings.addEventListener('click', () => {
-    localStorage.clear();
-  });
+  // resetSettings.addEventListener('click', () => {
+  //   localStorage.clear();
+  // });
 
   function updateToysView() {
     clearTimeout(timerId);

@@ -7,7 +7,7 @@
     </div>
     <div class="filter-sort">
       <h2 class="filter-sort__title">Сортировать</h2>
-      <select class="button" name="sortBy" id="sortBy">
+      <select class="button sort" name="sortBy" id="sortBy">
         <option value="name-up">по названию ⇧</option>
         <option value="name-down">по названию ⇩</option>
         <option value="year-up">по году ⇧</option>
@@ -17,29 +17,29 @@
       </select>
     </div>
 
-    <div class="filter-form">
-      <h3 class="filter-form__title">Форма</h3>
-      <div class="filter-form__options">
-        <button class="filter-form__option button" data-value="колокольчик">
-          <img src="../assets/svg/bell.svg" width="30" height="30" alt="">
-          Колокол
-        </button>
-        <button class="filter-form__option button" data-value="шар">
-          <img src="../assets/svg/ball.svg" width="30" height="30" alt="">
-          Шар
-        </button>
-        <button class="filter-form__option button" data-value="шишка">
-          <img src="../assets/svg/cone.svg" width="30" height="30" alt="">
-          Шишка
-        </button>
-        <button class="filter-form__option button" data-value="снежинка">
-          <img src="../assets/svg/snowflake.svg" width="30" height="30" alt="">
-          Снежинка
-        </button>
-        <button class="filter-form__option button" data-value="фигурка">
-          <img src="../assets/svg/toy.svg" width="30" height="30" alt="">
-          Фигурка
-        </button>
+    <div class="filter-shape">
+      <h3 class="filter-shape__title">Форма</h3>
+      <div class="filter-shape__options">
+        <label class="filter-value">
+          <input class="filter-shape__option hiden" data-value="колокольчик" type="checkbox" name="shape">
+          <img class="shape filter-value-bg" src="../assets/svg/bell.svg" alt="">
+        </label>
+        <label class="filter-value">
+          <input class="filter-shape__option hiden" data-value="шар" type="checkbox" name="shape">
+          <img class="shape filter-value-bg" src="../assets/svg/ball.svg" alt="">
+        </label>
+        <label class="filter-value">
+          <input class="filter-shape__option hiden" data-value="шишка" type="checkbox" name="shape">
+          <img class="shape filter-value-bg" src="../assets/svg/cone.svg" alt="">
+        </label>
+        <label class="filter-value">
+          <input class="filter-shape__option hiden" data-value="снежинка" type="checkbox" name="shape">
+          <img class="shape filter-value-bg" src="../assets/svg/snowflake.svg" alt="">
+        </label>
+        <label class="filter-value">
+          <input class="filter-shape__option hiden" data-value="фигурка" type="checkbox" name="shape">
+          <img class="shape filter-value-bg" src="../assets/svg/toy.svg" alt="">
+        </label>
       </div>
     </div>
 
@@ -64,47 +64,67 @@
     <div class="filter-color">
       <h3 class="filter-color__title">Цвет</h3>
       <div class="filter-color__options">
-        <button class="button filter-color__option" data-value="белый">
-          <div style="height: 24px; width: 24px; background-color: white;"></div>Белый
-        </button>
-        <button class="button filter-color__option" data-value="желтый">
-          <div style="height: 24px; width: 24px; background-color: yellow;"></div>Желтый
-        </button>
-        <button class="button filter-color__option" data-value="красный">
-          <div style="height: 24px; width: 24px; background-color: red;"></div>Красный
-        </button>
-        <button class="button filter-color__option" data-value="синий">
-          <div style="height: 24px; width: 24px; background-color: blue;"></div>Синий
-        </button>
-        <button class="button filter-color__option" data-value="зелёный">
-          <div style="height: 24px; width: 24px; background-color: green;"></div>Зеленый
-        </button>
+        <label class="filter-value">
+          <input class="filter-color__option hiden" data-value="белый" type="checkbox" name="color">
+          <div class="filter-value-bg">
+            <div class="color-bg" style="background-color: white;"></div>
+          </div>
+        </label>
+        <label class="filter-value">
+          <input class="filter-color__option hiden" data-value="желтый" type="checkbox" name="color">
+          <div class="filter-value-bg">
+            <div class="color-bg" style="background-color: yellow;"></div>
+          </div>
+        </label>
+        <label class="filter-value">
+          <input class="filter-color__option hiden" data-value="красный" type="checkbox" name="color">
+          <div class="filter-value-bg">
+            <div class="color-bg" style="background-color: red;"></div>
+          </div>
+        </label>
+        <label class="filter-value">
+          <input class="filter-color__option hiden" data-value="синий" type="checkbox" name="color">
+          <div class="filter-value-bg">
+            <div class="color-bg" style="background-color: blue;"></div>
+          </div>
+        </label>
+        <label class="filter-value">
+          <input class="filter-color__option hiden" data-value="зелёный" type="checkbox" name="color">
+          <div class="filter-value-bg">
+            <div class="color-bg" style="background-color: green;"></div>
+          </div>
+        </label>
       </div>
     </div>
 
     <div class="filter-size">
       <h3 class="filter-size__title">Размер</h3>
       <div class="filter-size__options">
-        <input class="filter-size__option hiden" data-value="большой" type="checkbox" name="favorite"
-          id="filter-size-big">
-        <label class="button" for="filter-size-big">Большой</label>
-        <input class="filter-size__option hiden" data-value="средний" type="checkbox" name="favorite"
-          id="filter-size-medium">
-        <label class="button" for="filter-size-medium">Средний</label>
-        <input class="filter-size__option hiden" data-value="малый" type="checkbox" name="favorite"
-          id="filter-size-small">
-        <label class="button" for="filter-size-small">Малый</label>
+        <label class="filter-value">
+          <input class="filter-size__option hiden" data-value="большой" type="checkbox" name="size">
+          <img class="filter-value-bg" src="../assets/svg/ball-2.svg" width="30" height="30" alt="">
+        </label>
+        <label class="filter-value">
+          <input class="filter-size__option hiden" data-value="средний" type="checkbox" name="size">
+          <img class="filter-value-bg" src="../assets/svg/ball-2.svg" width="25" height="25" alt="">
+        </label>
+        <label class="filter-value">
+          <input class="filter-size__option hiden" data-value="малый" type="checkbox" name="size">
+          <img class="filter-value-bg" src="../assets/svg/ball-2.svg" width="20" height="20" alt="">
+        </label>
       </div>
     </div>
 
     <div class="filter-favorite">
-      <input class="filter-favorite__option hiden" type="checkbox" name="favorite" id="filter-favorite">
-      <label class="button" for="filter-favorite">Только любимые</label>
+      <label class="filter-favorite__options filter-value">Только любимые
+        <input class="filter-favorite__option hiden" type="checkbox" name="favorite">
+        <img class="filter-value-bg" src="../assets/svg/heart.svg" width="20" height="20" alt="">
+      </label>
     </div>
 
     <div class="filters__reset">
       <button class="reset-filter btn button">Сбросить фильтры</button>
-      <button class="reset-settings btn button">Сбросить настройки</button>
+      <!-- <button class="reset-settings btn button">Сбросить настройки</button> -->
     </div>
   </div>
   <div class="toys__container">

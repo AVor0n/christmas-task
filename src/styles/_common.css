@@ -35,6 +35,11 @@ a:active,
   backdrop-filter: blur(31px);
 }
 
+.hiden {
+  position: absolute;
+  left: -9999px;
+}
+
 /*
 a > img:hover{
   filter: invert(57%) sepia(100%) saturate(329%) hue-rotate(5deg) brightness(99%) contrast(92%);
