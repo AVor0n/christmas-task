@@ -8,6 +8,16 @@ body {
   font-size: 1.6rem;
 }
 
+body::-webkit-scrollbar{
+  width: 6px;
+  background-color: var(--background-color);
+}
+
+body::-webkit-scrollbar-thumb{
+  background-color: #24C5DB;
+  border-radius: 6px;
+}
+
 a {
   color: var(--font-color);
   text-decoration: none;
@@ -19,7 +29,6 @@ a:active,
 .button:hover,
 .button:focus,
 .button:active {
-  /* color: var(--accent-color); */
   outline: none;
   cursor: pointer;
   filter: invert(25%) sepia(35%) saturate(3885%) hue-rotate(8deg) brightness(99%) contrast(89%);
@@ -49,8 +58,3 @@ a:active,
   position: absolute;
   left: -9999px;
 }
-
-/*
-a > img:hover{
-  filter: invert(57%) sepia(100%) saturate(329%) hue-rotate(5deg) brightness(99%) contrast(92%);
-} */
