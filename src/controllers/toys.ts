@@ -129,6 +129,7 @@ function toysPageController() {
     placeholder,
   );
 
+  restoreFilters();
   searchInp.focus();
   //* * ---------- Обработчики -----------------------------
 
@@ -229,6 +230,7 @@ function toysPageController() {
   });
 
   resetSettings.addEventListener('click', () => {
+    resetFilter.click();
     localStorage.clear();
     favoriteToysId.length = 0;
     const toys: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy');
@@ -237,7 +239,6 @@ function toysPageController() {
       toy.classList.remove('gold-glass-effect');
     }
     favoriteToysCounter.textContent = '0';
-    resetFilter.click();
   });
 
   function updateToysView() {
@@ -341,6 +342,36 @@ function toysPageController() {
     toy.appendChild(toyFavorite);
 
     return toy;
+  }
+
+  function restoreFilters() {
+    sortSelect.value = `${sort.prop}-${sort.direction}`;
+
+    searchInp.value = filter.name;
+
+    countSlider.noUiSlider.set([filter.count.from, filter.count.to]);
+    yearSlider.noUiSlider.set([filter.year.from, filter.year.to]);
+
+    for (const shapeBtn of shapeBtns) {
+      const shape = shapeBtn.dataset.value as toyShape;
+      if (filter.shape.includes(shape)) shapeBtn.checked = true;
+      else shapeBtn.checked = false;
+    }
+
+    for (const colorBtn of colorBtns) {
+      const color = colorBtn.dataset.value as toyColor;
+      if (filter.color.includes(color)) colorBtn.checked = true;
+      else colorBtn.checked = false;
+    }
+
+    for (const sizeBtn of sizeBtns) {
+      const size = sizeBtn.dataset.value as toySize;
+      if (filter.size.includes(size)) sizeBtn.checked = true;
+      else sizeBtn.checked = false;
+    }
+
+    if (filter.favorite) favoriteBtn.checked = true;
+    else favoriteBtn.checked = false;
   }
 }
 
