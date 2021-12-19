@@ -27,11 +27,11 @@ class SmoothShuffle<T extends DataItem> {
     this.itemCreator = itemCreator;
     this.placeHolder = placeHolder;
 
-    this.getItemInfo(data[0]);
+    if (data[0]) this.getItemInfo(data[0]);
     this.getGridInfo();
 
-    this.items = this.#initItems(data);
-    this.#updateHeigthContainer();
+    this.items = [];
+    this.update(data);
 
     window.addEventListener('resize', () => {
       this.getItemInfo(data[0]);
@@ -41,15 +41,6 @@ class SmoothShuffle<T extends DataItem> {
       }
       this.#updateHeigthContainer();
     });
-  }
-
-  #initItems(data: Array<T>) {
-    const items = [];
-    for (let i = 0; i < data.length; i++) {
-      const item = this.#createItem(data[i], i);
-      items.push(item);
-    }
-    return items;
   }
 
   #createItem(dataItem: T, idx: number) {
@@ -90,11 +81,13 @@ class SmoothShuffle<T extends DataItem> {
     });
 
     if (data.length === 0) {
-      if (this.placeHolder.parentElement) return;
+      if (this.placeHolder.parentElement) return [];
       this.container.appendChild(this.placeHolder);
       this.container.style.height = '80vh';
-      return;
+      return [];
     }
+
+    if (!this.itemWidth) this.getItemInfo(data[0]);
 
     if (this.placeHolder.parentElement) {
       this.container.removeChild(this.placeHolder);
@@ -110,6 +103,7 @@ class SmoothShuffle<T extends DataItem> {
       }
     }
     this.#updateHeigthContainer();
+    return this.items;
   }
 
   #offsetCenter = () => (this.columnWidth - this.itemWidth) / 2;
