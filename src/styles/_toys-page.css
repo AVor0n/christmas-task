@@ -212,6 +212,21 @@
   text-align: right;
 }
 
+.back-to-top {
+  position: fixed;
+  bottom: 12vh;
+  left: 6vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  font-size: 3rem;
+  background: var(--background-color);
+  border-radius: 50%;
+  visibility: hidden;
+}
+
 .noUi-target {
   height: 6px;
   background: transparent;
@@ -229,7 +244,7 @@
 }
 
 .noUi-handle::before,
-.noUi-handle::after{
+.noUi-handle::after {
   content: none;
 }
 

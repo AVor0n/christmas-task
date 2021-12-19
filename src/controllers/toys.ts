@@ -38,7 +38,7 @@ function toysPageController() {
   const favoriteBtn: HTMLInputElement = document.querySelector('.filter-favorite__option');
   const resetFilter: HTMLButtonElement = document.querySelector('.reset-filter');
   const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
-
+  const backToTop: HTMLAnchorElement = document.querySelector('.back-to-top');
   const searchInp: HTMLInputElement = document.querySelector('.filters__search');
   const favoriteToysId: Array<string> = JSON.parse(localStorage.getItem('favoriteToys')) || [];
   const favoriteToysCounter: HTMLDivElement = document.querySelector('.toys__counter');
@@ -132,6 +132,17 @@ function toysPageController() {
   restoreFilters();
   searchInp.focus();
   //* * ---------- Обработчики -----------------------------
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > document.documentElement.clientHeight)
+      backToTop.style.visibility = 'visible';
+    else {
+      backToTop.style.visibility = 'hidden';
+    }
+  });
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo(0, 0);
+  });
 
   sortSelect.addEventListener('change', () => {
     const [sortProp, sortDirecttion] = sortSelect.value.split('-');
