@@ -35,6 +35,16 @@ a:active,
   backdrop-filter: blur(31px);
 }
 
+.gold-glass-effect {
+  background: radial-gradient(
+    118.88% 606.86% at 0% 0%,
+    rgb(255 215 0 / 15%) 0%,
+    rgb(255 215 0 / 0%) 100%
+  );
+  border: 2px solid rgb(255 215 0);
+  backdrop-filter: blur(31px);
+}
+
 .hiden {
   position: absolute;
   left: -9999px;

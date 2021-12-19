@@ -38,8 +38,11 @@ function toysPageController() {
   const favoriteBtn: HTMLInputElement = document.querySelector('.filter-favorite__option');
   const resetFilter: HTMLButtonElement = document.querySelector('.reset-filter');
   // const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
-  const searchInp: HTMLInputElement = document.querySelector('.filters__search');
 
+  const searchInp: HTMLInputElement = document.querySelector('.filters__search');
+  const favoriteToysId: Array<string> = JSON.parse(localStorage.getItem('favoriteToys')) || [];
+  const favoriteToysCounter: HTMLDivElement = document.querySelector('.toys__counter');
+  favoriteToysCounter.textContent = `${favoriteToysId.length}`;
   let maxYear = -Infinity;
   let minYear = +Infinity;
   let maxCount = -Infinity;
@@ -237,6 +240,100 @@ function toysPageController() {
     actualToysData = applySort(sort, actualToysData);
     timerId = setTimeout(() => ss.update(actualToysData), 500);
   }
+
+  function toyCreator(toyData: toyInfo) {
+    const toy = document.createElement('div');
+    const toyTitle = document.createElement('p');
+    const toyImage = document.createElement('img');
+
+    const toyCountLabel = document.createElement('p');
+    const toyYearLabel = document.createElement('p');
+    const toyShapeLabel = document.createElement('p');
+    const toyColorLabel = document.createElement('p');
+    const toySizeLabel = document.createElement('p');
+    const toyFavoriteLabel = document.createElement('p');
+
+    const toyCount = document.createElement('p');
+    const toyYear = document.createElement('p');
+    const toyShape = document.createElement('p');
+    const toyColor = document.createElement('p');
+    const toySize = document.createElement('p');
+    const toyFavorite = document.createElement('p');
+
+    toy.className = favoriteToysId.includes(toyData.id)
+      ? 'toy gold-glass-effect'
+      : 'toy glass-effect';
+    toy.style.cursor = 'pointer';
+    toy.addEventListener('click', () => {
+      const i = favoriteToysId.indexOf(toyData.id);
+      if (i === -1) {
+        if (favoriteToysId.length < 20) {
+          favoriteToysId.push(toyData.id);
+          favoriteToysCounter.textContent = `${+favoriteToysCounter.textContent + 1}`;
+        } else {
+          alert('Все слоты заполнены');
+          return;
+        }
+      } else {
+        favoriteToysId.splice(i, 1);
+        favoriteToysCounter.textContent = `${+favoriteToysCounter.textContent - 1}`;
+      }
+      toy.classList.toggle('glass-effect');
+      toy.classList.toggle('gold-glass-effect');
+      localStorage.setItem('favoriteToys', JSON.stringify(favoriteToysId));
+    });
+    toyTitle.className = 'toy__title';
+    toyImage.className = 'toy__image';
+
+    toyCountLabel.className = 'toy__countlabel';
+    toyYearLabel.className = 'toy__yearlabel';
+    toyShapeLabel.className = 'toy__shapelabel';
+    toyColorLabel.className = 'toy__colorlabel';
+    toySizeLabel.className = 'toy__sizelabel';
+    toyFavoriteLabel.className = 'toy__favoritelabel';
+
+    toyCount.className = 'toy__count';
+    toyYear.className = 'toy__year';
+    toyShape.className = 'toy__shape';
+    toyColor.className = 'toy__color';
+    toySize.className = 'toy__size';
+    toyFavorite.className = 'toy__favorite';
+
+    toyCountLabel.textContent = 'Количество: ';
+    toyYearLabel.textContent = 'Год покупки: ';
+    toyShapeLabel.textContent = 'Форма: ';
+    toyColorLabel.textContent = 'Цвет : ';
+    toySizeLabel.textContent = 'Размер: ';
+    toyFavoriteLabel.textContent = 'Любимая: ';
+
+    toy.id = toyData.id;
+    toyTitle.textContent = toyData.name;
+    toyImage.src = `./assets/toys/${toyData.id}.png`;
+    toyImage.height = 150;
+    toyCount.textContent = `${toyData.count}`;
+    toyYear.textContent = `${toyData.year}`;
+    toyShape.textContent = toyData.shape;
+    toyColor.textContent = toyData.color;
+    toySize.textContent = toyData.size;
+    toyFavorite.textContent = toyData.favorite ? 'да' : 'нет';
+
+    toy.appendChild(toyTitle);
+    toy.appendChild(toyImage);
+    toy.appendChild(toyCountLabel);
+    toy.appendChild(toyCount);
+    toy.appendChild(toyYearLabel);
+    toy.appendChild(toyYear);
+    toy.appendChild(toyShapeLabel);
+    toy.appendChild(toyShape);
+    toy.appendChild(toyColorLabel);
+    toy.appendChild(toyColor);
+    toy.appendChild(toySizeLabel);
+    toy.appendChild(toySize);
+    toy.appendChild(toyFavoriteLabel);
+    toy.appendChild(toyFavorite);
+
+    return toy;
+  }
 }
 
 function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
@@ -290,79 +387,6 @@ function applySort(sort: Sort, toyData: Array<toyInfo>) {
   }
 
   return toyData;
-}
-
-function toyCreator(toyData: toyInfo) {
-  const toy = document.createElement('div');
-  const toyTitle = document.createElement('p');
-  const toyImage = document.createElement('img');
-
-  const toyCountLabel = document.createElement('p');
-  const toyYearLabel = document.createElement('p');
-  const toyShapeLabel = document.createElement('p');
-  const toyColorLabel = document.createElement('p');
-  const toySizeLabel = document.createElement('p');
-  const toyFavoriteLabel = document.createElement('p');
-
-  const toyCount = document.createElement('p');
-  const toyYear = document.createElement('p');
-  const toyShape = document.createElement('p');
-  const toyColor = document.createElement('p');
-  const toySize = document.createElement('p');
-  const toyFavorite = document.createElement('p');
-
-  toy.className = 'toy glass-effect';
-  toyTitle.className = 'toy__title';
-  toyImage.className = 'toy__image';
-
-  toyCountLabel.className = 'toy__countlabel';
-  toyYearLabel.className = 'toy__yearlabel';
-  toyShapeLabel.className = 'toy__shapelabel';
-  toyColorLabel.className = 'toy__colorlabel';
-  toySizeLabel.className = 'toy__sizelabel';
-  toyFavoriteLabel.className = 'toy__favoritelabel';
-
-  toyCount.className = 'toy__count';
-  toyYear.className = 'toy__year';
-  toyShape.className = 'toy__shape';
-  toyColor.className = 'toy__color';
-  toySize.className = 'toy__size';
-  toyFavorite.className = 'toy__favorite';
-
-  toyCountLabel.textContent = 'Количество: ';
-  toyYearLabel.textContent = 'Год покупки: ';
-  toyShapeLabel.textContent = 'Форма: ';
-  toyColorLabel.textContent = 'Цвет : ';
-  toySizeLabel.textContent = 'Размер: ';
-  toyFavoriteLabel.textContent = 'Любимая: ';
-
-  toy.id = toyData.id;
-  toyTitle.textContent = toyData.name;
-  toyImage.src = `./assets/toys/${toyData.id}.png`;
-  toyImage.height = 150;
-  toyCount.textContent = `${toyData.count}`;
-  toyYear.textContent = `${toyData.year}`;
-  toyShape.textContent = toyData.shape;
-  toyColor.textContent = toyData.color;
-  toySize.textContent = toyData.size;
-  toyFavorite.textContent = toyData.favorite ? 'да' : 'нет';
-
-  toy.appendChild(toyTitle);
-  toy.appendChild(toyImage);
-  toy.appendChild(toyCountLabel);
-  toy.appendChild(toyCount);
-  toy.appendChild(toyYearLabel);
-  toy.appendChild(toyYear);
-  toy.appendChild(toyShapeLabel);
-  toy.appendChild(toyShape);
-  toy.appendChild(toyColorLabel);
-  toy.appendChild(toyColor);
-  toy.appendChild(toySizeLabel);
-  toy.appendChild(toySize);
-  toy.appendChild(toyFavoriteLabel);
-  toy.appendChild(toyFavorite);
-
-  return toy;
 }
 
 export default toysPageController;
