@@ -37,7 +37,7 @@ function toysPageController() {
   const sizeBtns: NodeListOf<HTMLInputElement> = document.querySelectorAll('.filter-size__option');
   const favoriteBtn: HTMLInputElement = document.querySelector('.filter-favorite__option');
   const resetFilter: HTMLButtonElement = document.querySelector('.reset-filter');
-  // const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
+  const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
 
   const searchInp: HTMLInputElement = document.querySelector('.filters__search');
   const favoriteToysId: Array<string> = JSON.parse(localStorage.getItem('favoriteToys')) || [];
@@ -228,9 +228,17 @@ function toysPageController() {
     updateToysView();
   });
 
-  // resetSettings.addEventListener('click', () => {
-  //   localStorage.clear();
-  // });
+  resetSettings.addEventListener('click', () => {
+    localStorage.clear();
+    favoriteToysId.length = 0;
+    const toys: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy');
+    for (const toy of toys) {
+      toy.classList.add('glass-effect');
+      toy.classList.remove('gold-glass-effect');
+    }
+    favoriteToysCounter.textContent = '0';
+    resetFilter.click();
+  });
 
   function updateToysView() {
     clearTimeout(timerId);
