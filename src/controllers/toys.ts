@@ -219,6 +219,7 @@ function toysPageController() {
       size: [],
       favorite: false,
     };
+    searchInp.value = '';
     yearSlider.noUiSlider.reset();
     countSlider.noUiSlider.reset();
     for (const colorBtn of colorBtns) colorBtn.checked = false;
