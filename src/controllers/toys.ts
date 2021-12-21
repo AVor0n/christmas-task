@@ -90,7 +90,7 @@ function toysPageController() {
     step: 1,
   });
 
-  let timerId: NodeJS.Timeout;
+  let timerId: number;
 
   const defaultFilter: Filter = {
     name: '',
@@ -259,7 +259,7 @@ function toysPageController() {
     localStorage.setItem('sort', JSON.stringify(sort));
     actualToysData = applyFilter(filter, toysData);
     actualToysData = applySort(sort, actualToysData);
-    timerId = setTimeout(() => ss.update(actualToysData), 500);
+    timerId = window.setTimeout(() => ss.update(actualToysData), 500);
   }
 
   function toyCreator(toyData: toyInfo) {
