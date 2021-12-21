@@ -37,17 +37,17 @@ class SmoothShuffle<T extends DataItem> {
       this.getItemInfo(data[0]);
       this.getGridInfo();
       for (let i = 0; i < this.items.length; i++) {
-        this.#moveItem(this.items[i], i);
+        this.moveItem(this.items[i], i);
       }
-      this.#updateHeigthContainer();
+      this.updateHeigthContainer();
     });
   }
 
-  #createItem(dataItem: T, idx: number) {
+  private createItem(dataItem: T, idx: number) {
     const item = this.itemCreator(dataItem);
     item.style.position = 'absolute';
-    item.style.top = `${this.#getYbyIdx(idx)}px`;
-    item.style.left = `${this.#getXbyIdx(idx)}px`;
+    item.style.top = `${this.getYbyIdx(idx)}px`;
+    item.style.left = `${this.getXbyIdx(idx)}px`;
     item.style.transform = 'scale(0,0)';
     this.container.appendChild(item);
     setTimeout(() => {
@@ -56,14 +56,14 @@ class SmoothShuffle<T extends DataItem> {
     return item;
   }
 
-  #moveItem(item: HTMLDivElement, idx: number) {
+  private moveItem(item: HTMLDivElement, idx: number) {
     // eslint-disable-next-line no-param-reassign
-    item.style.top = `${this.#getYbyIdx(idx)}px`;
+    item.style.top = `${this.getYbyIdx(idx)}px`;
     // eslint-disable-next-line no-param-reassign
-    item.style.left = `${this.#getXbyIdx(idx)}px`;
+    item.style.left = `${this.getXbyIdx(idx)}px`;
   }
 
-  static #hideItem(item: HTMLDivElement) {
+  static hideItem(item: HTMLDivElement) {
     // eslint-disable-next-line no-param-reassign
     item.style.transform = 'scale(0,0)';
   }
@@ -73,7 +73,7 @@ class SmoothShuffle<T extends DataItem> {
 
     this.items = this.items.filter((item) => {
       if (!newIdx.includes(item.id)) {
-        SmoothShuffle.#hideItem(item);
+        SmoothShuffle.hideItem(item);
         setTimeout(() => item.remove(), 600);
         return false;
       }
@@ -96,23 +96,24 @@ class SmoothShuffle<T extends DataItem> {
     this.items = this.items.filter((item) => newIdx.includes(item.id));
     for (let i = 0; i < newIdx.length; i++) {
       let item = this.items.find((x) => x.id === newIdx[i]);
-      if (item) this.#moveItem(item, i);
+      if (item) this.moveItem(item, i);
       else {
-        item = this.#createItem(data[i], i);
+        item = this.createItem(data[i], i);
         this.items.push(item);
       }
     }
-    this.#updateHeigthContainer();
+    this.updateHeigthContainer();
     return this.items;
   }
 
-  #offsetCenter = () => (this.columnWidth - this.itemWidth) / 2;
-  #getXbyIdx = (idx: number) =>
-    (idx % this.columns) * (this.gapX + this.columnWidth) + this.#offsetCenter();
+  private offsetCenter = () => (this.columnWidth - this.itemWidth) / 2;
+  private getXbyIdx = (idx: number) =>
+    (idx % this.columns) * (this.gapX + this.columnWidth) + this.offsetCenter();
 
-  #getYbyIdx = (idx: number) => Math.floor(idx / this.columns) * (this.gapY + this.itemHeigth);
+  private getYbyIdx = (idx: number) =>
+    Math.floor(idx / this.columns) * (this.gapY + this.itemHeigth);
 
-  #updateHeigthContainer = () => {
+  private updateHeigthContainer = () => {
     this.container.style.height = `${
       Math.ceil(this.items.length / this.columns) * (this.itemHeigth + this.gapY) - this.gapY
     }px`;
