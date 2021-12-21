@@ -1,44 +1,50 @@
 type Route = { path: string; cb: () => void };
 
 class Router {
-  routes: Array<Route> = [];
-  current: string;
+  routes: Set<Route>;
 
   constructor() {
-    this.listen();
+    this.routes = new Set();
+
+    window.addEventListener('popstate', () => {
+      this.go(document.location.hash.replace('#/', ''));
+    });
   }
 
-  add = (path: string, cb: () => void) => {
-    this.routes.push({ path, cb });
+  private static normalize(path: string) {
+    return path.replace(/^\/|#\/|\/$/g, '');
+  }
+
+  add = (href: string, cb: () => void) => {
+    const path = Router.normalize(href);
+    this.routes.add({ path, cb });
     return this;
   };
 
-  remove = (path: string) => {
-    this.routes = this.routes.filter((route) => route.path !== path);
+  remove = (href: string) => {
+    const path = Router.normalize(href);
+
+    for (const route of this.routes) {
+      if (route.path === path) {
+        this.routes.delete(route);
+      }
+    }
     return this;
   };
 
   flush = () => {
-    this.routes = [];
+    this.routes.clear();
     return this;
   };
 
-  static clearSlashes = (path: string) => String(path).replace(/^\/|\/$/g, '');
+  go = (href: string) => {
+    const path = Router.normalize(href);
 
-  static getFragment = () => {
-    const match = window.location.href.match(/#(.*)$/);
-    const fragment = match ? match[1] : '';
-    return Router.clearSlashes(fragment);
-  };
-
-  listen = () => {
-    setInterval(() => {
-      if (this.current === Router.getFragment()) return;
-      this.current = Router.getFragment();
-
-      const currentRoute = this.routes.find((route) => route.path === this.current);
-      if (currentRoute) currentRoute.cb();
-    }, 50);
+    for (const route of this.routes) {
+      if (route.path === path) {
+        route.cb();
+      }
+    }
   };
 }
 

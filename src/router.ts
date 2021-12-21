@@ -12,6 +12,8 @@ router
   .add('toys', () => goToPage(toysPage, toysController))
   .add('', () => goToPage(startPage));
 
+router.go('');
+
 function goToPage(pageContent: string, pageController?: () => void) {
   document.querySelector('.main').innerHTML = pageContent;
   if (pageController) pageController();
