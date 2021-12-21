@@ -264,22 +264,22 @@ function toysPageController() {
 
   function toyCreator(toyData: toyInfo) {
     const toy = document.createElement('div');
-    const toyTitle = document.createElement('p');
+    const toyTitle = document.createElement('span');
     const toyImage = document.createElement('img');
 
-    const toyCountLabel = document.createElement('p');
-    const toyYearLabel = document.createElement('p');
-    const toyShapeLabel = document.createElement('p');
-    const toyColorLabel = document.createElement('p');
-    const toySizeLabel = document.createElement('p');
-    const toyFavoriteLabel = document.createElement('p');
+    const toyCountLabel = document.createElement('span');
+    const toyYearLabel = document.createElement('span');
+    const toyShapeLabel = document.createElement('span');
+    const toyColorLabel = document.createElement('span');
+    const toySizeLabel = document.createElement('span');
+    const toyFavoriteLabel = document.createElement('span');
 
-    const toyCount = document.createElement('p');
-    const toyYear = document.createElement('p');
-    const toyShape = document.createElement('p');
-    const toyColor = document.createElement('p');
-    const toySize = document.createElement('p');
-    const toyFavorite = document.createElement('p');
+    const toyCount = document.createElement('span');
+    const toyYear = document.createElement('span');
+    const toyShape = document.createElement('span');
+    const toyColor = document.createElement('span');
+    const toySize = document.createElement('span');
+    const toyFavorite = document.createElement('span');
 
     toy.className = favoriteToysId.includes(toyData.id)
       ? 'toy gold-glass-effect'
