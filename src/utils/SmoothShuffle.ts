@@ -6,6 +6,7 @@ interface DataItem {
 type ItemCreator = (data: DataItem) => HTMLDivElement;
 
 class SmoothShuffle<T extends DataItem> {
+  readonly REMOVE_ITEM_DELAY = 600;
   container: HTMLDivElement;
   columns: number;
   columnWidth: number;
@@ -74,7 +75,7 @@ class SmoothShuffle<T extends DataItem> {
     this.items = this.items.filter((item) => {
       if (!newIdx.includes(item.id)) {
         SmoothShuffle.hideItem(item);
-        setTimeout(() => item.remove(), 600);
+        setTimeout(() => item.remove(), this.REMOVE_ITEM_DELAY);
         return false;
       }
       return true;

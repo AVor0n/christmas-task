@@ -43,6 +43,9 @@ function toysPageController() {
   const favoriteToysId: Array<string> = JSON.parse(localStorage.getItem('favoriteToys')) || [];
   const favoriteToysCounter: HTMLDivElement = document.querySelector('.toys__counter');
   favoriteToysCounter.textContent = `${favoriteToysId.length}`;
+
+  const UPDATE_DELAY = 500;
+  const MAX_FAVORITE_TOYS = 20;
   let maxYear = -Infinity;
   let minYear = +Infinity;
   let maxCount = -Infinity;
@@ -259,7 +262,7 @@ function toysPageController() {
     localStorage.setItem('sort', JSON.stringify(sort));
     actualToysData = applyFilter(filter, toysData);
     actualToysData = applySort(sort, actualToysData);
-    timerId = window.setTimeout(() => ss.update(actualToysData), 500);
+    timerId = window.setTimeout(() => ss.update(actualToysData), UPDATE_DELAY);
   }
 
   function toyCreator(toyData: toyInfo) {
@@ -288,7 +291,7 @@ function toysPageController() {
     toy.addEventListener('click', () => {
       const i = favoriteToysId.indexOf(toyData.id);
       if (i === -1) {
-        if (favoriteToysId.length < 20) {
+        if (favoriteToysId.length < MAX_FAVORITE_TOYS) {
           favoriteToysId.push(toyData.id);
           favoriteToysCounter.textContent = `${+favoriteToysCounter.textContent + 1}`;
         } else {
