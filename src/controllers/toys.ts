@@ -69,7 +69,7 @@ function toysPageController() {
     tooltips: [true, true],
     format: {
       to: (value) => `${Math.floor(value)}`,
-      from: (value) => Math.floor(+value),
+      from: (value) => Math.floor(Number(value)),
     },
     range: {
       min: minCount,
@@ -88,7 +88,7 @@ function toysPageController() {
     tooltips: [true, true],
     format: {
       to: (value) => `${Math.floor(value)}`,
-      from: (value) => Math.floor(+value),
+      from: (value) => Math.floor(Number(value)),
     },
     step: 1,
   });
@@ -161,15 +161,15 @@ function toysPageController() {
 
   countSlider.noUiSlider.on('set', () => {
     const sliderValues = countSlider.noUiSlider.get() as Array<string>;
-    filter.count.from = +sliderValues[0];
-    filter.count.to = +sliderValues[1];
+    filter.count.from = Number(sliderValues[0]);
+    filter.count.to = Number(sliderValues[1]);
     updateToysView();
   });
 
   yearSlider.noUiSlider.on('set', () => {
     const sliderValues = yearSlider.noUiSlider.get() as Array<string>;
-    filter.year.from = +sliderValues[0];
-    filter.year.to = +sliderValues[1];
+    filter.year.from = Number(sliderValues[0]);
+    filter.year.to = Number(sliderValues[1]);
     updateToysView();
   });
 
@@ -296,14 +296,14 @@ function toysPageController() {
       if (i === -1) {
         if (favoriteToysId.length < MAX_FAVORITE_TOYS) {
           favoriteToysId.push(toyData.id);
-          favoriteToysCounter.textContent = `${+favoriteToysCounter.textContent + 1}`;
+          favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) + 1}`;
         } else {
           alert('Все слоты заполнены');
           return;
         }
       } else {
         favoriteToysId.splice(i, 1);
-        favoriteToysCounter.textContent = `${+favoriteToysCounter.textContent - 1}`;
+        favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) - 1}`;
       }
       toy.classList.toggle('glass-effect');
       toy.classList.toggle('gold-glass-effect');

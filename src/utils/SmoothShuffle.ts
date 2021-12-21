@@ -126,9 +126,9 @@ class SmoothShuffle<T extends DataItem> {
       .gridTemplateColumns.replace('px', '')
       .split(' ');
     const gaps = window.getComputedStyle(this.container).gap.replace(/px/g, '').split(' ');
-    this.columnWidth = +columns[0];
-    this.gapX = gaps[1] ? +gaps[1] : +gaps[0] || 0;
-    this.gapY = +gaps[0] || 0;
+    this.columnWidth = Number(columns[0]);
+    this.gapX = gaps[1] ? Number(gaps[1]) : Number(gaps[0]) || 0;
+    this.gapY = Number(gaps[0]) || 0;
     this.columns = columns.length;
   }
 
