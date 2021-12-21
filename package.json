@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
+    "build": "webpack --node-env=production",
+    "build:dev": "webpack",
     "serve": "webpack serve",
     "lint:ts": "eslint ./src --ext .ts",
     "fix:ts": "eslint ./src --ext .ts --fix",

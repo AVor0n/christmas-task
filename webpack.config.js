@@ -38,7 +38,7 @@ const config = {
         use: 'html-loader',
       },
       {
-        test: /\.(ts|tsx)$/i,
+        test: /\.ts$/i,
         loader: 'ts-loader',
         exclude: ['/node_modules/'],
       },
@@ -47,13 +47,13 @@ const config = {
         use: [stylesHandler, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+        test: /\.(svg|png)$/i,
         type: 'asset',
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts', '.js'],
   },
 };
 
