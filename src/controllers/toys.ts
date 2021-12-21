@@ -123,7 +123,7 @@ function toysPageController() {
   const container: HTMLDivElement = document.querySelector('.toys__container');
   let actualToysData: Array<toyInfo> = applySort(sort, applyFilter(filter, toysData));
   const placeholder = document.createElement('p');
-  placeholder.className = 'toys__placeholder glass-effect';
+  placeholder.classList.add('toys__placeholder', 'glass-effect');
   placeholder.innerHTML = 'Совпадений не найденно. <br>Попробуйте другую комбинацию фильтров';
   const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(
     container,
@@ -284,9 +284,12 @@ function toysPageController() {
     const toySize = document.createElement('span');
     const toyFavorite = document.createElement('span');
 
-    toy.className = favoriteToysId.includes(toyData.id)
-      ? 'toy gold-glass-effect'
-      : 'toy glass-effect';
+    if (favoriteToysId.includes(toyData.id)) {
+      toy.classList.add('toy', 'gold-glass-effect');
+    } else {
+      toy.classList.add('toy', 'glass-effect');
+    }
+
     toy.style.cursor = 'pointer';
     toy.addEventListener('click', () => {
       const i = favoriteToysId.indexOf(toyData.id);
@@ -306,22 +309,22 @@ function toysPageController() {
       toy.classList.toggle('gold-glass-effect');
       localStorage.setItem('favoriteToys', JSON.stringify(favoriteToysId));
     });
-    toyTitle.className = 'toy__title';
-    toyImage.className = 'toy__image';
+    toyTitle.classList.add('toy__title');
+    toyImage.classList.add('toy__image');
 
-    toyCountLabel.className = 'toy__countlabel';
-    toyYearLabel.className = 'toy__yearlabel';
-    toyShapeLabel.className = 'toy__shapelabel';
-    toyColorLabel.className = 'toy__colorlabel';
-    toySizeLabel.className = 'toy__sizelabel';
-    toyFavoriteLabel.className = 'toy__favoritelabel';
+    toyCountLabel.classList.add('toy__countlabel');
+    toyYearLabel.classList.add('toy__yearlabel');
+    toyShapeLabel.classList.add('toy__shapelabel');
+    toyColorLabel.classList.add('toy__colorlabel');
+    toySizeLabel.classList.add('toy__sizelabel');
+    toyFavoriteLabel.classList.add('toy__favoritelabel');
 
-    toyCount.className = 'toy__count';
-    toyYear.className = 'toy__year';
-    toyShape.className = 'toy__shape';
-    toyColor.className = 'toy__color';
-    toySize.className = 'toy__size';
-    toyFavorite.className = 'toy__favorite';
+    toyCount.classList.add('toy__count');
+    toyYear.classList.add('toy__year');
+    toyShape.classList.add('toy__shape');
+    toyColor.classList.add('toy__color');
+    toySize.classList.add('toy__size');
+    toyFavorite.classList.add('toy__favorite');
 
     toyCountLabel.textContent = 'Количество: ';
     toyYearLabel.textContent = 'Год покупки: ';
