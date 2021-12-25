@@ -1,0 +1,121 @@
+.tree-page {
+  display: grid;
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 15px;
+  min-height: 100%;
+  padding-bottom: 70px;
+  background-image: url('../assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: cover;
+}
+
+.tree-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-image: url('../assets/bg/1.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.tree {
+  position: relative;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.container__title {
+  color: var(--font-color);
+}
+
+.tree-container,
+.bg-container,
+.toys-container {
+  display: grid;
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  justify-items: center;
+  margin: 10px auto;
+}
+
+.bg-container {
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tree-item,
+.bg-item,
+.toy-item,
+.store-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background-color: rgb(255 255 255 / 50%);
+  border-radius: 10px;
+}
+
+.toy-item{
+  position: relative;
+}
+
+.bg-item {
+  width: 55px;
+  height: 55px;
+}
+
+.store-container {
+  display: grid;
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+  grid-auto-columns: 50%;
+  grid-auto-flow: column;
+  width: 24vw;
+  min-width: 0;
+  min-height: 0;
+  margin-top: 15px;
+  padding-bottom: 10px;
+  overflow-x: auto;
+}
+
+.store-container::-webkit-scrollbar {
+  height: 6px;
+  background-color: var(--background-color);
+}
+
+.store-container::-webkit-scrollbar-thumb {
+  background-color: #24c5db;
+  border-radius: 6px;
+}
+
+.store-item {
+  width: 150px;
+  height: 150px;
+}
+
+.toy-item__label {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  color: black;
+  font-size: 16px;
+  line-height: 21px;
+  text-align: center;
+  background-color: #24c5db;
+  border-radius: 50%;
+}
