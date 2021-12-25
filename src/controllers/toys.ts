@@ -40,9 +40,9 @@ function toysPageController() {
   const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
   const backToTop: HTMLAnchorElement = document.querySelector('.back-to-top');
   const searchInp: HTMLInputElement = document.querySelector('.filters__search');
-  const favoriteToysId: Array<string> = JSON.parse(localStorage.getItem('favoriteToys')) || [];
+  const favoriteToys: BoxOfToys = JSON.parse(localStorage.getItem('favoriteToys')) || [];
   const favoriteToysCounter: HTMLDivElement = document.querySelector('.toys__counter');
-  favoriteToysCounter.textContent = `${favoriteToysId.length}`;
+  favoriteToysCounter.textContent = `${favoriteToys.length}`;
 
   const UPDATE_DELAY = 500;
   const MAX_FAVORITE_TOYS = 20;
@@ -247,7 +247,7 @@ function toysPageController() {
   resetSettings.addEventListener('click', () => {
     resetFilter.click();
     localStorage.clear();
-    favoriteToysId.length = 0;
+    favoriteToys.length = 0;
     const toys: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy');
     for (const toy of toys) {
       toy.classList.add('glass-effect');
@@ -284,7 +284,7 @@ function toysPageController() {
     const toySize = document.createElement('span');
     const toyFavorite = document.createElement('span');
 
-    if (favoriteToysId.includes(toyData.id)) {
+    if (favoriteToys.find((favoriteToy) => favoriteToy.id === toyData.id)) {
       toy.classList.add('toy', 'gold-glass-effect');
     } else {
       toy.classList.add('toy', 'glass-effect');
@@ -292,22 +292,22 @@ function toysPageController() {
 
     toy.style.cursor = 'pointer';
     toy.addEventListener('click', () => {
-      const i = favoriteToysId.indexOf(toyData.id);
+      const i = favoriteToys.findIndex((favoriteToy) => favoriteToy.id === toyData.id);
       if (i === -1) {
-        if (favoriteToysId.length < MAX_FAVORITE_TOYS) {
-          favoriteToysId.push(toyData.id);
+        if (favoriteToys.length < MAX_FAVORITE_TOYS) {
+          favoriteToys.push({ id: toyData.id, count: toyData.count });
           favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) + 1}`;
         } else {
           alert('Все слоты заполнены');
           return;
         }
       } else {
-        favoriteToysId.splice(i, 1);
+        favoriteToys.splice(i, 1);
         favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) - 1}`;
       }
       toy.classList.toggle('glass-effect');
       toy.classList.toggle('gold-glass-effect');
-      localStorage.setItem('favoriteToys', JSON.stringify(favoriteToysId));
+      localStorage.setItem('favoriteToys', JSON.stringify(favoriteToys));
     });
     toyTitle.classList.add('toy__title');
     toyImage.classList.add('toy__image');

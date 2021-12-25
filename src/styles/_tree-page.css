@@ -118,4 +118,5 @@
   text-align: center;
   background-color: #24c5db;
   border-radius: 50%;
+  visibility: hidden;
 }
