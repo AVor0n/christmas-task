@@ -35,7 +35,10 @@ function initTree() {
   const treeItems: NodeListOf<HTMLDivElement> = document.querySelectorAll('.tree-item');
 
   for (const treeItem of treeItems) {
-    treeItem.addEventListener('click', () => setTree(Number(treeItem.dataset.id)));
+    treeItem.addEventListener('click', () => {
+      setTree(Number(treeItem.dataset.id));
+      removeToysFromTree('soft', (toy) => !isCorrectToyPosition(toy));
+    });
   }
 }
 
@@ -267,6 +270,12 @@ function moveToyToContainer(toy: HTMLImageElement) {
     return;
   }
 
+  const t = toy.getBoundingClientRect().top;
+  const l = toy.getBoundingClientRect().left;
+  document.body.append(toy);
+  toy.style.left = `${l}px`;
+  toy.style.top = `${t}px`;
+
   const toyCountLabel = toyContainer.querySelector('.toy-item__label') as HTMLElement;
   const { top, left, width, height } = toyContainer.getBoundingClientRect();
 
@@ -450,4 +459,13 @@ function clearSavedTrees() {
   storeContainer.innerHTML = `
     <div class="store-item" data-id="0"></div>
     <div class="store-item"></div>`;
+}
+
+function isCorrectToyPosition(toy: HTMLImageElement) {
+  const treeArea: HTMLAreaElement = document.querySelector('.tree__area');
+  const { x, y } = toy.getBoundingClientRect();
+  toy.style.display = 'none';
+  const elemUnderToy = document.elementFromPoint(x + toy.clientWidth / 2, y);
+  toy.style.display = '';
+  return elemUnderToy === treeArea;
 }
