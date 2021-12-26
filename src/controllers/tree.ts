@@ -5,19 +5,37 @@ export default function treePageController() {
   initTreeBackground();
   initFavoriteToysCounter();
   initToys();
+  initSavedTrees();
+
+  const saveBtn = document.querySelector('.save-tree');
+  saveBtn.addEventListener('click', () => {
+    const appState = saveStateOfApp();
+    const container = getContainerForTree();
+    printTreeToContainer(container);
+    container.addEventListener('click', () => restoreStateOfApp(appState));
+  });
+
+  const resetBtn = document.querySelector('.reset-settings');
+  resetBtn.addEventListener('click', () => {
+    localStorage.clear();
+    removeToysFromTree();
+    clearBoxOfToys();
+    initToys();
+    setFavoriteToysCounter(0);
+    clearSavedTrees();
+    setTree(1);
+    setTreeBackground(1);
+  });
 }
 
 function initTree() {
-  const treeId: number = Number(JSON.parse(localStorage.getItem('treeId'))) || 1;
+  const treeId = Number(JSON.parse(localStorage.getItem('treeId'))) || 1;
   setTree(treeId);
 
   const treeItems: NodeListOf<HTMLDivElement> = document.querySelectorAll('.tree-item');
 
   for (const treeItem of treeItems) {
-    treeItem.addEventListener('click', () => {
-      setTree(Number(treeItem.dataset.id));
-      localStorage.setItem('treeId', treeItem.dataset.id);
-    });
+    treeItem.addEventListener('click', () => setTree(Number(treeItem.dataset.id)));
   }
 }
 
@@ -37,6 +55,8 @@ function setTree(id: number | string) {
 
   treeImg.src = `../assets/tree/${id}.png`;
   treeArea.coords = TREE_COORDS[id];
+
+  localStorage.setItem('treeId', String(id));
 }
 
 function initTreeBackground() {
@@ -46,10 +66,7 @@ function initTreeBackground() {
   const bgItems: NodeListOf<HTMLDivElement> = document.querySelectorAll('.bg-item');
 
   for (const bgItem of bgItems) {
-    bgItem.addEventListener('click', () => {
-      setTreeBackground(bgItem.dataset.id);
-      localStorage.setItem('treeBackId', bgItem.dataset.id);
-    });
+    bgItem.addEventListener('click', () => setTreeBackground(bgItem.dataset.id));
   }
 }
 
@@ -57,24 +74,36 @@ function setTreeBackground(id: number | string) {
   id = Number(id) || 1;
   const treeImgBack: HTMLImageElement = document.querySelector('.tree-back');
   treeImgBack.style.backgroundImage = `url('../assets/bg/${id}.jpg')`;
+  localStorage.setItem('treeBackId', String(id));
 }
 
 function initFavoriteToysCounter() {
-  const toysCounter = document.querySelector('.toys__counter');
   const favoriteToys: BoxOfToys = JSON.parse(localStorage.getItem('favoriteToys')) || [];
-  toysCounter.textContent = `${favoriteToys.length}`;
+  setFavoriteToysCounter(favoriteToys.length);
+}
+
+function setFavoriteToysCounter(count: number) {
+  const toysCounter = document.querySelector('.toys__counter');
+  toysCounter.textContent = String(count);
 }
 
 function initToys() {
-  const toyContainers: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy-item');
   const toysOnTree: Array<ToyPostion> = JSON.parse(localStorage.getItem('toysOnTree')) || [];
-  let boxOfToys: BoxOfToys = JSON.parse(localStorage.getItem('favoriteToys')) || [];
+  const boxOfToys: BoxOfToys = JSON.parse(localStorage.getItem('favoriteToys')) || [];
+
+  setToys(toysOnTree, boxOfToys);
+}
+
+function setToys(toysOnTree: Array<ToyPostion>, boxOfToys: BoxOfToys) {
+  const tree: HTMLElement = document.querySelector('.tree');
+  const toyContainers: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy-item');
+
   if (!boxOfToys.length)
     boxOfToys = toysData.slice(0, 20).map((toy) => ({ id: toy.id, count: toy.count }));
 
   for (const toyOnTree of toysOnTree) {
     const toy = createToyImage(toyOnTree.id);
-    attachToyToSpruce(toy, +toyOnTree.left, +toyOnTree.top);
+    attachToyToTree(tree, toy, +toyOnTree.left, +toyOnTree.top);
     const toyInBox = boxOfToys.find((toyFromBox) => toyFromBox.id === toyOnTree.id);
     if (toyInBox) toyInBox.count -= 1;
   }
@@ -167,12 +196,12 @@ function dragAndDrop(toyEl: HTMLImageElement, event: MouseEvent) {
     toy.style.display = '';
 
     if (elemUnderToy === treeArea) {
-      const tree = document.querySelector('.tree');
+      const tree: HTMLImageElement = document.querySelector('.tree');
       const { top, left } = tree.getBoundingClientRect();
 
-      const x = e.x - left - shiftX;
-      const y = e.y - top - shiftY;
-      attachToyToSpruce(toy, x, y);
+      const x = (e.x - left - shiftX) / tree.clientWidth;
+      const y = (e.y - top - shiftY) / tree.clientHeight;
+      attachToyToTree(tree, toy, x, y);
     } else {
       moveToyToContainer(toy);
     }
@@ -188,11 +217,21 @@ function dragAndDrop(toyEl: HTMLImageElement, event: MouseEvent) {
 function saveToysPosition() {
   const tree = document.querySelector('.tree');
   const toysOnTreeEl: Array<HTMLImageElement> = Array.from(tree.querySelectorAll('.toy-image'));
-  const toysOnTreeData: Array<ToyPostion> = toysOnTreeEl.map((toyEl) => ({
-    id: toyEl.dataset.id,
-    left: toyEl.style.left.replace('px', ''),
-    top: toyEl.style.top.replace('px', ''),
-  }));
+  const toysOnTreeData: Array<ToyPostion> = [];
+  const treeWidth = tree.clientWidth;
+  const treeHeight = tree.clientHeight;
+
+  for (const toyEl of toysOnTreeEl) {
+    const toyLeft = Number(toyEl.style.left.replace('px', ''));
+    const toyTop = Number(toyEl.style.top.replace('px', ''));
+
+    const toyData = {
+      id: toyEl.dataset.id,
+      left: String(toyLeft / treeWidth),
+      top: String(toyTop / treeHeight),
+    };
+    toysOnTreeData.push(toyData);
+  }
 
   const toysInBoxEl: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy-item');
   const toysInBoxData: BoxOfToys = [];
@@ -211,12 +250,11 @@ function saveToysPosition() {
   localStorage.setItem('boxOfToys', JSON.stringify(toysInBoxData));
 }
 
-function attachToyToSpruce(toy: HTMLImageElement, left: number, top: number) {
-  const tree = document.querySelector('.tree');
-  toy.style.position = 'absolute';
-  toy.style.top = `${top}px`;
-  toy.style.left = `${left}px`;
+function attachToyToTree(tree: HTMLElement, toy: HTMLImageElement, x: number, y: number) {
   tree.append(toy);
+  toy.style.position = 'absolute';
+  toy.style.left = `${x * tree.clientWidth}px`;
+  toy.style.top = `${y * tree.clientHeight}px`;
 }
 
 function moveToyToContainer(toy: HTMLImageElement) {
@@ -274,4 +312,142 @@ function changeToyCountLabel(label: HTMLElement, type: 'increment' | 'decrement'
 
   label.textContent = `${value}`;
   label.style.visibility = value <= 0 ? 'hidden' : 'visible';
+}
+
+function getContainerForTree() {
+  const containers: NodeListOf<HTMLDivElement> = document.querySelectorAll('.store-item');
+  if (containers.length === 2) {
+    if (!containers[0].hasChildNodes()) {
+      return containers[0];
+    }
+
+    if (!containers[1].hasChildNodes()) {
+      containers[1].remove();
+    }
+  }
+
+  const container = containers[0].cloneNode() as HTMLDivElement;
+  container.dataset.id = `${Number(containers[0].dataset.id) + 1}`;
+  containers[0].before(container);
+  return container;
+}
+
+function printTreeToContainer(container: HTMLElement) {
+  const tree: HTMLElement = document.querySelector('.tree');
+  const treeBack: HTMLElement = document.querySelector('.tree-back');
+
+  const k = container.clientWidth / treeBack.clientWidth;
+
+  const treeClone = tree.cloneNode(true) as HTMLElement;
+
+  const treeImage: HTMLImageElement = treeClone.querySelector('.tree__image');
+  treeImage.height *= k;
+  treeImage.width *= k;
+
+  const toysOnTree: NodeListOf<HTMLImageElement> = treeClone.querySelectorAll('.toy-image');
+  for (const toyOnTree of toysOnTree) {
+    toyOnTree.height *= k;
+    toyOnTree.width *= k;
+
+    toyOnTree.style.top = `${Number.parseFloat(toyOnTree.style.top) * k}px`;
+    toyOnTree.style.left = `${Number.parseFloat(toyOnTree.style.left) * k}px`;
+  }
+
+  treeClone.style.pointerEvents = 'none';
+  container.style.backgroundImage = treeBack.style.backgroundImage;
+  container.append(treeClone);
+}
+
+function saveStateOfApp() {
+  const countSavedStates: number = JSON.parse(localStorage.getItem('countSavedStates')) || 0;
+  const stateId = String(countSavedStates);
+  const stateOfApp: AppState = {
+    treeId: JSON.parse(localStorage.getItem('treeId')) || 1,
+    backId: JSON.parse(localStorage.getItem('treeBackId')) || 1,
+    favoriteToys: JSON.parse(localStorage.getItem('favoriteToys')) || [],
+    toysOnTree: JSON.parse(localStorage.getItem('toysOnTree')) || [],
+  };
+  localStorage.setItem('countSavedStates', String(countSavedStates + 1));
+  localStorage.setItem(`state${stateId}`, JSON.stringify(stateOfApp));
+  return stateOfApp;
+}
+
+function restoreStateOfApp(state: AppState) {
+  removeToysFromTree();
+  clearBoxOfToys();
+  localStorage.setItem('treeId', String(state.treeId));
+  localStorage.setItem('treeBackId', String(state.backId));
+  localStorage.setItem('toysOnTree', JSON.stringify(state.toysOnTree));
+  localStorage.setItem('favoriteToys', JSON.stringify(state.favoriteToys));
+  initToys();
+  setTree(state.treeId);
+  setTreeBackground(state.backId);
+  setFavoriteToysCounter(state.favoriteToys.length);
+}
+
+function removeToysFromTree(
+  mode?: 'soft' | 'hard',
+  condition?: (toy: HTMLImageElement) => boolean,
+) {
+  const tree: HTMLElement = document.querySelector('.tree');
+  const toysOnTree: NodeListOf<HTMLImageElement> = tree.querySelectorAll('.toy-image');
+
+  for (const toyOnTree of toysOnTree) {
+    if (!condition || (condition && condition(toyOnTree))) {
+      if (mode && mode === 'soft') {
+        moveToyToContainer(toyOnTree);
+      } else {
+        toyOnTree.remove();
+      }
+    }
+  }
+}
+
+function clearBoxOfToys() {
+  const toyContainers: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy-item');
+  for (const toyContainer of toyContainers) {
+    const toyImage = toyContainer.querySelector('img');
+    if (toyImage) toyImage.remove();
+
+    const toyCountLabel: HTMLElement = toyContainer.querySelector('.toy-item__label');
+    toyCountLabel.textContent = '0';
+    toyCountLabel.style.visibility = 'hidden';
+  }
+}
+
+function initSavedTrees() {
+  const countSavedTrees = JSON.parse(localStorage.getItem('countSavedStates')) || 0;
+
+  for (let i = 0; i < countSavedTrees; i++) {
+    const state: AppState = JSON.parse(localStorage.getItem(`state${i}`));
+    const container = getContainerForTree();
+    container.classList.add('tree-back');
+
+    const tree = document.createElement('div');
+    tree.classList.add('tree');
+    container.append(tree);
+    container.addEventListener('click', () => restoreStateOfApp(state));
+
+    const treeImg = document.createElement('img');
+    treeImg.src = `../assets/tree/${state.treeId}.png`;
+    treeImg.classList.add('tree__image');
+    tree.append(treeImg);
+
+    setTimeout(() => {
+      for (const toyData of state.toysOnTree) {
+        const toy = document.createElement('img');
+        toy.src = `../assets/toys/${toyData.id}.png`;
+        toy.width = tree.clientHeight * 0.1;
+        toy.height = tree.clientHeight * 0.1;
+        attachToyToTree(tree, toy, +toyData.left, +toyData.top);
+      }
+    }, 1000);
+  }
+}
+
+function clearSavedTrees() {
+  const storeContainer: HTMLElement = document.querySelector('.store-container');
+  storeContainer.innerHTML = `
+    <div class="store-item" data-id="0"></div>
+    <div class="store-item"></div>`;
 }
