@@ -3,4 +3,5 @@ type AppState = {
   treeId: number;
   backId: number;
   favoriteToys: BoxOfToys;
+  idSnowfall: number;
 };

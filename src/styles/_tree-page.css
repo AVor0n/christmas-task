@@ -12,6 +12,7 @@
 }
 
 .content {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,4 +145,17 @@
   background-color: #24c5db;
   border-radius: 50%;
   visibility: hidden;
+}
+
+.snowflake {
+	position: absolute;
+	top: 0;
+	color: #fff;
+	animation: fall linear forwards;
+}
+
+@keyframes fall {
+	to {
+		transform: translateY(85vh);
+	}
 }

@@ -6,6 +6,7 @@ export default function treePageController() {
   initFavoriteToysCounter();
   initToys();
   initSavedTrees();
+  initSnowfall();
 
   const saveBtn = document.querySelector('.save-tree');
   saveBtn.addEventListener('click', () => {
@@ -17,6 +18,7 @@ export default function treePageController() {
 
   const resetBtn = document.querySelector('.reset-settings');
   resetBtn.addEventListener('click', () => {
+    clearInterval(Number(localStorage.getItem('snowfall')));
     localStorage.clear();
     removeToysFromTree();
     clearBoxOfToys();
@@ -25,6 +27,7 @@ export default function treePageController() {
     clearSavedTrees();
     setTree(1);
     setTreeBackground(1);
+    initSnowfall();
   });
 }
 
@@ -375,6 +378,7 @@ function saveStateOfApp() {
     backId: JSON.parse(localStorage.getItem('treeBackId')) || 1,
     favoriteToys: JSON.parse(localStorage.getItem('favoriteToys')) || [],
     toysOnTree: JSON.parse(localStorage.getItem('toysOnTree')) || [],
+    idSnowfall: JSON.parse(localStorage.getItem('snowfall')) || 0,
   };
   localStorage.setItem('countSavedStates', String(countSavedStates + 1));
   localStorage.setItem(`state${stateId}`, JSON.stringify(stateOfApp));
@@ -382,16 +386,21 @@ function saveStateOfApp() {
 }
 
 function restoreStateOfApp(state: AppState) {
+  clearInterval(Number(localStorage.getItem('snowfall')));
   removeToysFromTree();
   clearBoxOfToys();
+
   localStorage.setItem('treeId', String(state.treeId));
   localStorage.setItem('treeBackId', String(state.backId));
   localStorage.setItem('toysOnTree', JSON.stringify(state.toysOnTree));
   localStorage.setItem('favoriteToys', JSON.stringify(state.favoriteToys));
+  localStorage.setItem('snowfall', String(state.idSnowfall));
+
   initToys();
   setTree(state.treeId);
   setTreeBackground(state.backId);
   setFavoriteToysCounter(state.favoriteToys.length);
+  initSnowfall();
 }
 
 function removeToysFromTree(
@@ -468,4 +477,47 @@ function isCorrectToyPosition(toy: HTMLImageElement) {
   const elemUnderToy = document.elementFromPoint(x + toy.clientWidth / 2, y);
   toy.style.display = '';
   return elemUnderToy === treeArea;
+}
+
+function initSnowfall() {
+  const container: HTMLElement = document.querySelector('.content');
+  let snowIntervalId = Number(localStorage.getItem('snowfall'));
+
+  if (snowIntervalId) {
+    snowIntervalId = window.setInterval(() => {
+      createSnowFlake(container);
+    }, 50);
+    localStorage.setItem('snowfall', String(snowIntervalId));
+    console.log(`1 ${snowIntervalId}`);
+  }
+
+  const snowBtn: HTMLButtonElement = document.querySelector('.btn--snow');
+
+  snowBtn.onclick = () => {
+    if (!snowIntervalId) {
+      snowIntervalId = window.setInterval(() => createSnowFlake(container), 50);
+      localStorage.setItem('snowfall', String(snowIntervalId));
+      console.log(`3 ${snowIntervalId}`);
+    } else {
+      clearInterval(snowIntervalId);
+      snowIntervalId = null;
+      localStorage.setItem('snowfall', '0');
+    }
+  };
+}
+
+function createSnowFlake(container: HTMLElement) {
+  const snowflake = document.createElement('span');
+  snowflake.textContent = '❄';
+  snowflake.classList.add('snowflake');
+  snowflake.style.left = `${Math.random() * container.clientWidth}px`;
+  snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // between 2 - 5 seconds
+  snowflake.style.opacity = `${Math.random()}`;
+  snowflake.style.fontSize = `${Math.random() * 10 + 10}px`;
+
+  container.append(snowflake);
+
+  setTimeout(() => {
+    snowflake.remove();
+  }, 5000);
 }
