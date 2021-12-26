@@ -4,4 +4,5 @@ type AppState = {
   backId: number;
   favoriteToys: BoxOfToys;
   idSnowfall: number;
+  music: boolean;
 };

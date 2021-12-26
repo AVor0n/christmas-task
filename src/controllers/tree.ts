@@ -7,6 +7,7 @@ export default function treePageController() {
   initToys();
   initSavedTrees();
   initSnowfall();
+  initMusic();
 
   const saveBtn = document.querySelector('.save-tree');
   saveBtn.addEventListener('click', () => {
@@ -27,6 +28,7 @@ export default function treePageController() {
     clearSavedTrees();
     setTree(1);
     setTreeBackground(1);
+    setMusic('reset');
     initSnowfall();
   });
 }
@@ -379,6 +381,7 @@ function saveStateOfApp() {
     favoriteToys: JSON.parse(localStorage.getItem('favoriteToys')) || [],
     toysOnTree: JSON.parse(localStorage.getItem('toysOnTree')) || [],
     idSnowfall: JSON.parse(localStorage.getItem('snowfall')) || 0,
+    music: JSON.parse(localStorage.getItem('music')) || false,
   };
   localStorage.setItem('countSavedStates', String(countSavedStates + 1));
   localStorage.setItem(`state${stateId}`, JSON.stringify(stateOfApp));
@@ -395,11 +398,14 @@ function restoreStateOfApp(state: AppState) {
   localStorage.setItem('toysOnTree', JSON.stringify(state.toysOnTree));
   localStorage.setItem('favoriteToys', JSON.stringify(state.favoriteToys));
   localStorage.setItem('snowfall', String(state.idSnowfall));
+  localStorage.setItem('music', String(state.music));
 
   initToys();
   setTree(state.treeId);
   setTreeBackground(state.backId);
   setFavoriteToysCounter(state.favoriteToys.length);
+  setMusic('reset');
+  setMusic(state.music ? 'play' : 'pause');
   initSnowfall();
 }
 
@@ -520,4 +526,47 @@ function createSnowFlake(container: HTMLElement) {
   setTimeout(() => {
     snowflake.remove();
   }, 5000);
+}
+
+function initMusic() {
+  const audio: HTMLAudioElement = document.querySelector('.audio');
+
+  if (localStorage.getItem('music') === 'true') {
+    const autoDestroyListener = () => {
+      audio.play();
+      document.removeEventListener('mousedown', autoDestroyListener);
+    };
+    document.addEventListener('mousedown', autoDestroyListener);
+  }
+
+  const soundBtn: HTMLButtonElement = document.querySelector('.btn--sound');
+
+  soundBtn.onclick = () => {
+    if (audio.paused) {
+      audio.play();
+      localStorage.setItem('music', 'true');
+    } else {
+      audio.pause();
+      localStorage.setItem('music', '');
+    }
+  };
+}
+
+function setMusic(action: 'play' | 'pause' | 'reset') {
+  const audio: HTMLAudioElement = document.querySelector('.audio');
+
+  if (action === 'play') {
+    audio.play();
+    return;
+  }
+
+  if (action === 'pause') {
+    audio.pause();
+    return;
+  }
+
+  if (action === 'reset') {
+    audio.pause();
+    audio.currentTime = 0;
+  }
 }
