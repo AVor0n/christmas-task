@@ -24,14 +24,17 @@ a {
 }
 
 a:hover,
-a:focus,
 a:active,
 .action:hover,
-.action:focus,
 .action:active {
   outline: none;
   cursor: pointer;
   filter: invert(25%) sepia(35%) saturate(3885%) hue-rotate(8deg) brightness(99%) contrast(89%);
+}
+
+.active{
+  border: 1px solid #24c5db;
+  filter: drop-shadow(0 0 7px #24c5db);
 }
 
 .glass-effect {

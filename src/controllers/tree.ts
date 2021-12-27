@@ -18,6 +18,8 @@ export default function treePageController() {
   garland = new Garland(4, 0.4, 20, garlandColor);
   const garlandBtns: NodeListOf<HTMLInputElement> = document.querySelectorAll('.garland-option');
   for (const garlandBtn of garlandBtns) {
+    garlandBtn.checked = garlandBtn.dataset.value === garlandColor;
+
     garlandBtn.addEventListener('click', () => {
       if (garlandBtn.dataset.value === garland.color) {
         garlandBtn.checked = false;
@@ -55,6 +57,14 @@ export default function treePageController() {
     setMusic('reset');
     initSnowfall();
     garland.off();
+
+    const defaultTreeBtn: HTMLInputElement = document.querySelector('.tree-item-default');
+    const defaultBackBtn: HTMLInputElement = document.querySelector('.bg-item-default');
+    defaultTreeBtn.checked = true;
+    defaultBackBtn.checked = true;
+    for (const btn of garlandBtns) {
+      btn.checked = false;
+    }
   });
 }
 
@@ -92,12 +102,13 @@ function setTree(id: number | string) {
     '6': '215,2,202,5,201,53,184,36,188,68,166,58,162,80,168,93,154,91,140,127,126,116,124,127,137,157,130,166,110,156,104,165,135,193,91,206,92,216,110,220,98,231,84,227,79,236,105,255,88,270,74,264,71,287,49,290,52,301,92,305,61,310,73,331,43,346,45,359,67,366,41,377,55,391,18,417,23,425,53,425,15,452,37,479,2,502,54,520,45,536,67,542,85,534,81,546,91,554,101,544,111,554,148,544,132,557,141,569,189,556,205,567,229,563,244,574,254,568,243,555,270,561,330,542,349,521,387,526,388,496,371,493,369,474,403,474,400,461,378,460,386,447,366,443,382,430,360,421,377,408,348,400,370,391,369,369,354,367,324,342,350,339,349,326,325,318,361,309,356,300,334,294,342,282,307,261,333,250,303,236,328,223,301,216,300,205,319,200,283,188,282,177,302,153,277,156,283,125,265,127,269,106,263,86,247,91,249,67,235,63,241,35,233,29,214,55',
   };
 
+  const treeBtn: HTMLInputElement = document.querySelector(`.tree-item-input[data-id="${id}"]`);
   const treeImg: HTMLImageElement = document.querySelector('.tree__image');
   const treeArea: HTMLAreaElement = document.querySelector('.tree__area');
 
   treeImg.src = `../assets/tree/${id}.png`;
   treeArea.coords = TREE_COORDS[id];
-
+  treeBtn.checked = true;
   localStorage.setItem('treeId', String(id));
 }
 
@@ -114,8 +125,10 @@ function initTreeBackground() {
 
 function setTreeBackground(id: number | string) {
   id = Number(id) || 1;
+  const treeBgBtn: HTMLInputElement = document.querySelector(`.bg-item-input[data-id="${id}"]`);
   const treeImgBack: HTMLImageElement = document.querySelector('.tree-back');
   treeImgBack.style.backgroundImage = `url('../assets/bg/${id}.jpg')`;
+  treeBgBtn.checked = true;
   localStorage.setItem('treeBackId', String(id));
 }
 
@@ -446,6 +459,10 @@ function restoreStateOfApp(state: AppState) {
   setMusic(state.music ? 'play' : 'pause');
   initSnowfall();
   garland.setColor(state.garland);
+  const garlandBtns: NodeListOf<HTMLInputElement> = document.querySelectorAll('.garland-option');
+  for (const garlandBtn of garlandBtns) {
+    garlandBtn.checked = garlandBtn.dataset.value === garland.color;
+  }
 }
 
 function removeToysFromTree(
