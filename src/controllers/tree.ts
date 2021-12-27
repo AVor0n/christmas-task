@@ -472,6 +472,7 @@ function initSavedTrees() {
     const state: AppState = JSON.parse(localStorage.getItem(`state${i}`));
     const container = getContainerForTree();
     container.classList.add('tree-back');
+    container.style.backgroundImage = `url('../assets/bg/${state.backId}.jpg')`;
 
     const tree = document.createElement('div');
     tree.classList.add('tree');
