@@ -75,7 +75,8 @@ function initTree() {
         return needDelete;
       });
 
-      if (needShowMessage) messsage(3000, 'Игрушки, которые не нашли опоры, вернулись в коробку.');
+      if (needShowMessage)
+        messsage(5000, 'Игрушки, которые не нашли опору,', 'вернулись в коробку.');
     });
   }
 }
@@ -179,6 +180,9 @@ function createToyImage(id: number | string) {
 
 function dragAndDrop(toyEl: HTMLImageElement, event: MouseEvent) {
   //* * ------------ Prepare ------------------ */
+  const { left: toyLeft, right: toyRight, top: toyTop } = toyEl.getBoundingClientRect();
+  const shiftPivotX = event.x - (toyLeft + toyRight) / 2;
+  const shiftPivotY = event.y - toyTop;
 
   const shiftX = event.x - toyEl.getBoundingClientRect().left;
   const shiftY = event.y - toyEl.getBoundingClientRect().top;
@@ -219,7 +223,7 @@ function dragAndDrop(toyEl: HTMLImageElement, event: MouseEvent) {
     moveAt(e.x, e.y);
 
     toy.style.display = 'none';
-    const elemUnderToy = document.elementFromPoint(e.clientX, e.clientY);
+    const elemUnderToy = document.elementFromPoint(e.x - shiftPivotX, e.y - shiftPivotY);
     toy.style.display = '';
 
     if (elemUnderToy === treeArea) {
@@ -233,7 +237,7 @@ function dragAndDrop(toyEl: HTMLImageElement, event: MouseEvent) {
 
   toy.onmouseup = (e) => {
     toy.style.display = 'none';
-    const elemUnderToy = document.elementFromPoint(e.clientX, e.clientY);
+    const elemUnderToy = document.elementFromPoint(e.x - shiftPivotX, e.y - shiftPivotY);
     toy.style.display = '';
 
     if (elemUnderToy === treeArea) {
@@ -514,9 +518,10 @@ function clearSavedTrees() {
 
 function isCorrectToyPosition(toy: HTMLImageElement) {
   const treeArea: HTMLAreaElement = document.querySelector('.tree__area');
-  const { x, y } = toy.getBoundingClientRect();
+  const { left, right, top } = toy.getBoundingClientRect();
   toy.style.display = 'none';
-  const elemUnderToy = document.elementFromPoint(x + toy.clientWidth / 2, y);
+  const elemUnderToy = document.elementFromPoint((left + right) / 2, top);
+
   toy.style.display = '';
   return elemUnderToy === treeArea;
 }

@@ -299,7 +299,11 @@ function toysPageController() {
           favoriteToys.push({ id: toyData.id, count: toyData.count });
           favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) + 1}`;
         } else {
-          message(3000, 'Все слоты заполнены');
+          message(
+            3000,
+            'Все слоты заполнены',
+            `Максимальное количество избранных игрушек: ${MAX_FAVORITE_TOYS}`,
+          );
           return;
         }
       } else {
