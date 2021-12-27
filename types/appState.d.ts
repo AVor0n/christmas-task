@@ -5,4 +5,5 @@ type AppState = {
   favoriteToys: BoxOfToys;
   idSnowfall: number;
   music: boolean;
+  garland: GarlandColor;
 };

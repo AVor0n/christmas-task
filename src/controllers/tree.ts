@@ -1,4 +1,8 @@
+/* eslint-disable no-loop-func */
 import toysData from '../data';
+import Garland from '../ts/garland';
+
+let garland: Garland;
 
 export default function treePageController() {
   initTree();
@@ -8,6 +12,25 @@ export default function treePageController() {
   initSavedTrees();
   initSnowfall();
   initMusic();
+
+  const garlandColor = (localStorage.getItem('garland') as GarlandColor) || '';
+  garland = new Garland(4, 0.4, 20, garlandColor);
+  const garlandBtns: NodeListOf<HTMLInputElement> = document.querySelectorAll('.garland-option');
+  for (const garlandBtn of garlandBtns) {
+    garlandBtn.addEventListener('click', () => {
+      if (garlandBtn.dataset.value === garland.color) {
+        garlandBtn.checked = false;
+        garland.off();
+        localStorage.setItem('garland', '');
+      } else {
+        garland.setColor(garlandBtn.dataset.value as GarlandColor);
+        localStorage.setItem('garland', garland.color);
+        for (const btn of garlandBtns) {
+          btn.checked = btn.dataset.value === garlandBtn.dataset.value;
+        }
+      }
+    });
+  }
 
   const saveBtn = document.querySelector('.save-tree');
   saveBtn.addEventListener('click', () => {
@@ -30,6 +53,7 @@ export default function treePageController() {
     setTreeBackground(1);
     setMusic('reset');
     initSnowfall();
+    garland.off();
   });
 }
 
@@ -349,11 +373,10 @@ function getContainerForTree() {
 function printTreeToContainer(container: HTMLElement) {
   const tree: HTMLElement = document.querySelector('.tree');
   const treeBack: HTMLElement = document.querySelector('.tree-back');
-
   const k = container.clientWidth / treeBack.clientWidth;
 
   const treeClone = tree.cloneNode(true) as HTMLElement;
-
+  treeClone.querySelector('.garland-container').remove();
   const treeImage: HTMLImageElement = treeClone.querySelector('.tree__image');
   treeImage.height *= k;
   treeImage.width *= k;
@@ -373,15 +396,16 @@ function printTreeToContainer(container: HTMLElement) {
 }
 
 function saveStateOfApp() {
-  const countSavedStates: number = JSON.parse(localStorage.getItem('countSavedStates')) || 0;
+  const countSavedStates: number = Number(localStorage.getItem('countSavedStates')) || 0;
   const stateId = String(countSavedStates);
   const stateOfApp: AppState = {
-    treeId: JSON.parse(localStorage.getItem('treeId')) || 1,
-    backId: JSON.parse(localStorage.getItem('treeBackId')) || 1,
+    treeId: Number(localStorage.getItem('treeId')) || 1,
+    backId: Number(localStorage.getItem('treeBackId')) || 1,
     favoriteToys: JSON.parse(localStorage.getItem('favoriteToys')) || [],
     toysOnTree: JSON.parse(localStorage.getItem('toysOnTree')) || [],
-    idSnowfall: JSON.parse(localStorage.getItem('snowfall')) || 0,
-    music: JSON.parse(localStorage.getItem('music')) || false,
+    idSnowfall: Number(localStorage.getItem('snowfall')) || 0,
+    music: Boolean(localStorage.getItem('music')) || false,
+    garland: (localStorage.getItem('garland') as GarlandColor) || '',
   };
   localStorage.setItem('countSavedStates', String(countSavedStates + 1));
   localStorage.setItem(`state${stateId}`, JSON.stringify(stateOfApp));
@@ -399,6 +423,7 @@ function restoreStateOfApp(state: AppState) {
   localStorage.setItem('favoriteToys', JSON.stringify(state.favoriteToys));
   localStorage.setItem('snowfall', String(state.idSnowfall));
   localStorage.setItem('music', String(state.music));
+  localStorage.setItem('garland', state.garland);
 
   initToys();
   setTree(state.treeId);
@@ -407,6 +432,7 @@ function restoreStateOfApp(state: AppState) {
   setMusic('reset');
   setMusic(state.music ? 'play' : 'pause');
   initSnowfall();
+  garland.setColor(state.garland);
 }
 
 function removeToysFromTree(
@@ -492,18 +518,16 @@ function initSnowfall() {
   if (snowIntervalId) {
     snowIntervalId = window.setInterval(() => {
       createSnowFlake(container);
-    }, 50);
+    }, 150);
     localStorage.setItem('snowfall', String(snowIntervalId));
-    console.log(`1 ${snowIntervalId}`);
   }
 
   const snowBtn: HTMLButtonElement = document.querySelector('.btn--snow');
 
   snowBtn.onclick = () => {
     if (!snowIntervalId) {
-      snowIntervalId = window.setInterval(() => createSnowFlake(container), 50);
+      snowIntervalId = window.setInterval(() => createSnowFlake(container), 150);
       localStorage.setItem('snowfall', String(snowIntervalId));
-      console.log(`3 ${snowIntervalId}`);
     } else {
       clearInterval(snowIntervalId);
       snowIntervalId = null;
@@ -517,7 +541,7 @@ function createSnowFlake(container: HTMLElement) {
   snowflake.textContent = '❄';
   snowflake.classList.add('snowflake');
   snowflake.style.left = `${Math.random() * container.clientWidth}px`;
-  snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // between 2 - 5 seconds
+  snowflake.style.animationDuration = `${Math.random() * 3 + 3}s`; // between 2 - 5 seconds
   snowflake.style.opacity = `${Math.random()}`;
   snowflake.style.fontSize = `${Math.random() * 10 + 10}px`;
 
