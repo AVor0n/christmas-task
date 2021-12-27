@@ -2,6 +2,7 @@
 import noUiSlider, { API } from 'nouislider';
 import SmoothShuffle from '../utils/SmoothShuffle';
 import toysData from '../data';
+import message from '../ts/message';
 
 type Range = {
   from: number;
@@ -298,7 +299,7 @@ function toysPageController() {
           favoriteToys.push({ id: toyData.id, count: toyData.count });
           favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) + 1}`;
         } else {
-          alert('Все слоты заполнены');
+          message(3000, 'Все слоты заполнены');
           return;
         }
       } else {

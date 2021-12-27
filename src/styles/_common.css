@@ -58,3 +58,30 @@ a:active,
   position: absolute;
   left: -9999px;
 }
+
+.message {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 300px;
+  min-height: 100px;
+  padding: 30px;
+  color: white;
+  font-size: 3rem;
+  background: radial-gradient(
+    118.88% 606.86% at 0% 0%,
+    rgb(36 197 219 / 15%) 0%,
+    rgb(36 197 219 / 0%) 100%
+  );
+  border: 2px solid #24C5DB;
+  border-radius: 30px;
+  transform: translateX(-50%);
+  backdrop-filter: blur(50px);
+  transition: all 1s;
+  pointer-events: none;
+}

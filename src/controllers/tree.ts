@@ -1,6 +1,7 @@
 /* eslint-disable no-loop-func */
 import toysData from '../data';
 import Garland from '../ts/garland';
+import messsage from '../ts/message';
 
 let garland: Garland;
 
@@ -66,7 +67,15 @@ function initTree() {
   for (const treeItem of treeItems) {
     treeItem.addEventListener('click', () => {
       setTree(Number(treeItem.dataset.id));
-      removeToysFromTree('soft', (toy) => !isCorrectToyPosition(toy));
+
+      let needShowMessage = false;
+      removeToysFromTree('soft', (toy) => {
+        const needDelete = !isCorrectToyPosition(toy);
+        if (needDelete) needShowMessage = true;
+        return needDelete;
+      });
+
+      if (needShowMessage) messsage(3000, 'Игрушки, которые не нашли опоры, вернулись в коробку.');
     });
   }
 }
