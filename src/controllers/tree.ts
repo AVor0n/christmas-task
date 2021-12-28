@@ -343,6 +343,7 @@ function moveToyToContainer(toy: HTMLImageElement) {
       toyContainer.append(toy);
       toy.style.position = '';
       toy.style.zIndex = '';
+      toy.style.transitionDuration = '';
     } else {
       toy.remove();
     }
