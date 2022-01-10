@@ -6,7 +6,8 @@
     "target": "es6",
     "allowJs": false,
     "moduleResolution": "node",
-    "outDir": "dist"
+    "outDir": "dist",
+    "strict": true,
   },
   "include": [
     "./src",

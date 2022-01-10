@@ -22,6 +22,7 @@ module.exports = {
     'no-undef': 'off',
     'no-unused-vars': 'warn',
     'no-restricted-syntax': 'off',
+    'no-param-reassign': 'off',
     'import/extensions': [
       'error',
       'always',
