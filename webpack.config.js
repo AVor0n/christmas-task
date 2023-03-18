@@ -15,7 +15,7 @@ const config = {
     clean: true,
   },
   devServer: {
-    // open: true,
+    open: true,
     host: 'localhost',
   },
   plugins: [
