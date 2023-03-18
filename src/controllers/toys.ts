@@ -1,34 +1,35 @@
 /* eslint-disable no-loop-func */
-import noUiSlider, { API } from 'nouislider';
-import SmoothShuffle from '../utils/SmoothShuffle';
+import noUiSlider from 'nouislider';
 import toysData from '../data';
 import message from '../ts/message';
+import SmoothShuffle from '../utils/SmoothShuffle';
+import type { API } from 'nouislider';
 
-type Range = {
+interface Range {
   from: number;
   to: number;
-};
+}
 
-type Filter = {
+interface Filter {
   name: string;
   count: Range;
   year: Range;
-  shape: Array<toyShape>;
-  color: Array<toyColor>;
-  size: Array<toySize>;
+  shape: toyShape[];
+  color: toyColor[];
+  size: toySize[];
   favorite: boolean;
-};
+}
 
-type Sort = {
+interface Sort {
   prop: 'name' | 'year' | 'count';
   direction: 'up' | 'down';
-};
+}
 interface Instanse extends HTMLElement {
   noUiSlider: API;
 }
 
 function toysPageController() {
-  const sortSelect = document.getElementById('sortBy') as HTMLSelectElement;
+  const sortSelect = document.querySelector('#sortBy') as HTMLSelectElement;
   const shapeBtns: NodeListOf<HTMLInputElement> =
     document.querySelectorAll('.filter-shape__option');
   const colorBtns: NodeListOf<HTMLInputElement> =
@@ -47,10 +48,10 @@ function toysPageController() {
 
   const UPDATE_DELAY = 500;
   const MAX_FAVORITE_TOYS = 20;
-  let maxYear = -Infinity;
-  let minYear = +Infinity;
-  let maxCount = -Infinity;
-  let minCount = +Infinity;
+  let maxYear = Number.NEGATIVE_INFINITY;
+  let minYear = +Number.POSITIVE_INFINITY;
+  let maxCount = Number.NEGATIVE_INFINITY;
+  let minCount = +Number.POSITIVE_INFINITY;
 
   for (const toy of toysData) {
     if (toy.year > maxYear) maxYear = toy.year;
@@ -122,26 +123,18 @@ function toysPageController() {
   };
 
   const container: HTMLDivElement = document.querySelector('.toys__container');
-  let actualToysData: Array<toyInfo> = applySort(sort, applyFilter(filter, toysData));
+  let actualToysData: toyInfo[] = applySort(sort, applyFilter(filter, toysData));
   const placeholder = document.createElement('p');
   placeholder.classList.add('toys__placeholder', 'glass-effect');
   placeholder.innerHTML = 'Совпадений не найденно. <br>Попробуйте другую комбинацию фильтров';
-  const ss: SmoothShuffle<toyInfo> = new SmoothShuffle(
-    container,
-    actualToysData,
-    toyCreator,
-    placeholder,
-  );
+  const ss = new SmoothShuffle<toyInfo>(container, actualToysData, toyCreator, placeholder);
 
   restoreFilters();
   searchInp.focus();
   //* * ---------- Обработчики -----------------------------
   window.addEventListener('scroll', () => {
-    if (window.scrollY > document.documentElement.clientHeight)
-      backToTop.style.visibility = 'visible';
-    else {
-      backToTop.style.visibility = 'hidden';
-    }
+    backToTop.style.visibility =
+      window.scrollY > document.documentElement.clientHeight ? 'visible' : 'hidden';
   });
 
   backToTop.addEventListener('click', () => {
@@ -161,14 +154,14 @@ function toysPageController() {
   });
 
   countSlider.noUiSlider.on('set', () => {
-    const sliderValues = countSlider.noUiSlider.get() as Array<string>;
+    const sliderValues = countSlider.noUiSlider.get() as string[];
     filter.count.from = Number(sliderValues[0]);
     filter.count.to = Number(sliderValues[1]);
     updateToysView();
   });
 
   yearSlider.noUiSlider.on('set', () => {
-    const sliderValues = yearSlider.noUiSlider.get() as Array<string>;
+    const sliderValues = yearSlider.noUiSlider.get() as string[];
     filter.year.from = Number(sliderValues[0]);
     filter.year.to = Number(sliderValues[1]);
     updateToysView();
@@ -349,20 +342,20 @@ function toysPageController() {
     toySize.textContent = toyData.size;
     toyFavorite.textContent = toyData.favorite ? 'да' : 'нет';
 
-    toy.appendChild(toyTitle);
-    toy.appendChild(toyImage);
-    toy.appendChild(toyCountLabel);
-    toy.appendChild(toyCount);
-    toy.appendChild(toyYearLabel);
-    toy.appendChild(toyYear);
-    toy.appendChild(toyShapeLabel);
-    toy.appendChild(toyShape);
-    toy.appendChild(toyColorLabel);
-    toy.appendChild(toyColor);
-    toy.appendChild(toySizeLabel);
-    toy.appendChild(toySize);
-    toy.appendChild(toyFavoriteLabel);
-    toy.appendChild(toyFavorite);
+    toy.append(toyTitle);
+    toy.append(toyImage);
+    toy.append(toyCountLabel);
+    toy.append(toyCount);
+    toy.append(toyYearLabel);
+    toy.append(toyYear);
+    toy.append(toyShapeLabel);
+    toy.append(toyShape);
+    toy.append(toyColorLabel);
+    toy.append(toyColor);
+    toy.append(toySizeLabel);
+    toy.append(toySize);
+    toy.append(toyFavoriteLabel);
+    toy.append(toyFavorite);
 
     return toy;
   }
@@ -377,29 +370,25 @@ function toysPageController() {
 
     for (const shapeBtn of shapeBtns) {
       const shape = shapeBtn.dataset.value as toyShape;
-      if (filter.shape.includes(shape)) shapeBtn.checked = true;
-      else shapeBtn.checked = false;
+      shapeBtn.checked = !!filter.shape.includes(shape);
     }
 
     for (const colorBtn of colorBtns) {
       const color = colorBtn.dataset.value as toyColor;
-      if (filter.color.includes(color)) colorBtn.checked = true;
-      else colorBtn.checked = false;
+      colorBtn.checked = !!filter.color.includes(color);
     }
 
     for (const sizeBtn of sizeBtns) {
       const size = sizeBtn.dataset.value as toySize;
-      if (filter.size.includes(size)) sizeBtn.checked = true;
-      else sizeBtn.checked = false;
+      sizeBtn.checked = !!filter.size.includes(size);
     }
 
-    if (filter.favorite) favoriteBtn.checked = true;
-    else favoriteBtn.checked = false;
+    favoriteBtn.checked = !!filter.favorite;
   }
 }
 
-function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
-  let data = toyData.slice();
+function applyFilter(filter: Filter, toyData: toyInfo[]) {
+  let data = [...toyData];
 
   if (filter.name) {
     const regex = new RegExp(filter.name, 'i');
@@ -414,15 +403,15 @@ function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
     data = data.filter((toy) => filter.year.from <= toy.year && toy.year <= filter.year.to);
   }
 
-  if (filter.color.length) {
+  if (filter.color.length > 0) {
     data = data.filter((toy) => filter.color.includes(toy.color));
   }
 
-  if (filter.shape.length) {
+  if (filter.shape.length > 0) {
     data = data.filter((toy) => filter.shape.includes(toy.shape));
   }
 
-  if (filter.size.length) {
+  if (filter.size.length > 0) {
     data = data.filter((toy) => filter.size.includes(toy.size));
   }
 
@@ -433,7 +422,7 @@ function applyFilter(filter: Filter, toyData: Array<toyInfo>) {
   return data;
 }
 
-function applySort(sort: Sort, toyData: Array<toyInfo>) {
+function applySort(sort: Sort, toyData: toyInfo[]) {
   const collator = new Intl.Collator('ru');
 
   if (sort.direction === 'up') {

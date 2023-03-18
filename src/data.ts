@@ -1,4 +1,4 @@
-const data: Array<toyInfo> = [
+const data: toyInfo[] = [
   {
     id: '1',
     name: 'Большой шар с рисунком',

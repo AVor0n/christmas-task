@@ -1,8 +1,12 @@
 export default class Garland {
   readonly container: HTMLElement;
+
   readonly countLines: number;
+
   readonly curvature: number; // 0 < curvature <= 1; 0 - прямая, 1 - окружность
+
   readonly gap: number;
+
   color: GarlandColor;
 
   constructor(countLines: number, curvature: number, gap: number, color?: GarlandColor) {

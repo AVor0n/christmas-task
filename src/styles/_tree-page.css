@@ -237,7 +237,7 @@
   background-size: 25px;
 }
 
-.controls-panel{
+.controls-panel {
   display: flex;
   flex-direction: column;
   gap: 10px;

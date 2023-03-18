@@ -7,20 +7,30 @@ type ItemCreator = (data: DataItem) => HTMLDivElement;
 
 class SmoothShuffle<T extends DataItem> {
   readonly REMOVE_ITEM_DELAY = 600;
+
   container: HTMLDivElement;
+
   columns: number;
+
   columnWidth: number;
+
   itemWidth: number;
+
   itemHeigth: number;
+
   gapX: number;
+
   gapY: number;
-  items: Array<HTMLDivElement>;
+
+  items: HTMLDivElement[];
+
   itemCreator: ItemCreator;
+
   placeHolder: HTMLElement;
 
   constructor(
     container: HTMLDivElement,
-    data: Array<T>,
+    data: T[],
     itemCreator: ItemCreator,
     placeHolder: HTMLElement,
   ) {
@@ -50,7 +60,7 @@ class SmoothShuffle<T extends DataItem> {
     item.style.top = `${this.getYbyIdx(idx)}px`;
     item.style.left = `${this.getXbyIdx(idx)}px`;
     item.style.transform = 'scale(0,0)';
-    this.container.appendChild(item);
+    this.container.append(item);
     setTimeout(() => {
       item.style.transform = 'scale(1,1)';
     }, 0);
@@ -69,7 +79,7 @@ class SmoothShuffle<T extends DataItem> {
     item.style.transform = 'scale(0,0)';
   }
 
-  update(data: Array<T>) {
+  update(data: T[]) {
     const newIdx = data.map((x) => x.id);
 
     this.items = this.items.filter((item) => {
@@ -83,7 +93,7 @@ class SmoothShuffle<T extends DataItem> {
 
     if (data.length === 0) {
       if (this.placeHolder.parentElement) return [];
-      this.container.appendChild(this.placeHolder);
+      this.container.append(this.placeHolder);
       this.container.style.height = '80vh';
       return [];
     }
@@ -91,12 +101,12 @@ class SmoothShuffle<T extends DataItem> {
     if (!this.itemWidth) this.getItemInfo(data[0]);
 
     if (this.placeHolder.parentElement) {
-      this.container.removeChild(this.placeHolder);
+      this.placeHolder.remove();
     }
 
     this.items = this.items.filter((item) => newIdx.includes(item.id));
-    for (let i = 0; i < newIdx.length; i++) {
-      let item = this.items.find((x) => x.id === newIdx[i]);
+    for (const [i, element] of newIdx.entries()) {
+      let item = this.items.find((x) => x.id === element);
       if (item) this.moveItem(item, i);
       else {
         item = this.createItem(data[i], i);
@@ -107,14 +117,15 @@ class SmoothShuffle<T extends DataItem> {
     return this.items;
   }
 
-  private offsetCenter = () => (this.columnWidth - this.itemWidth) / 2;
-  private getXbyIdx = (idx: number) =>
+  private readonly offsetCenter = () => (this.columnWidth - this.itemWidth) / 2;
+
+  private readonly getXbyIdx = (idx: number) =>
     (idx % this.columns) * (this.gapX + this.columnWidth) + this.offsetCenter();
 
-  private getYbyIdx = (idx: number) =>
+  private readonly getYbyIdx = (idx: number) =>
     Math.floor(idx / this.columns) * (this.gapY + this.itemHeigth);
 
-  private updateHeigthContainer = () => {
+  private readonly updateHeigthContainer = () => {
     this.container.style.height = `${
       Math.ceil(this.items.length / this.columns) * (this.itemHeigth + this.gapY) - this.gapY
     }px`;
@@ -125,7 +136,7 @@ class SmoothShuffle<T extends DataItem> {
       .getComputedStyle(this.container)
       .gridTemplateColumns.replace('px', '')
       .split(' ');
-    const gaps = window.getComputedStyle(this.container).gap.replace(/px/g, '').split(' ');
+    const gaps = window.getComputedStyle(this.container).gap.replace(/px/gu, '').split(' ');
     this.columnWidth = Number(columns[0]);
     this.gapX = gaps[1] ? Number(gaps[1]) : Number(gaps[0]) || 0;
     this.gapY = Number(gaps[0]) || 0;
@@ -134,7 +145,7 @@ class SmoothShuffle<T extends DataItem> {
 
   getItemInfo(dataItem: T) {
     const item = this.itemCreator(dataItem);
-    this.container.appendChild(item);
+    this.container.append(item);
     const itemInfo = window.getComputedStyle(item);
     this.itemHeigth = Number.parseFloat(itemInfo.height);
     this.itemWidth = Number.parseFloat(itemInfo.width);

@@ -8,13 +8,13 @@ body {
   font-size: 1.6rem;
 }
 
-body::-webkit-scrollbar{
+body::-webkit-scrollbar {
   width: 6px;
   background-color: var(--background-color);
 }
 
-body::-webkit-scrollbar-thumb{
-  background-color: #24C5DB;
+body::-webkit-scrollbar-thumb {
+  background-color: #24c5db;
   border-radius: 6px;
 }
 
@@ -32,7 +32,7 @@ a:active,
   filter: invert(25%) sepia(35%) saturate(3885%) hue-rotate(8deg) brightness(99%) contrast(89%);
 }
 
-.active{
+.active {
   border: 1px solid #24c5db;
   filter: drop-shadow(0 0 7px #24c5db);
 }
@@ -43,7 +43,7 @@ a:active,
     rgb(36 197 219 / 15%) 0%,
     rgb(36 197 219 / 0%) 100%
   );
-  border: 2px solid #24C5DB;
+  border: 2px solid #24c5db;
   backdrop-filter: blur(31px);
 }
 
@@ -82,7 +82,7 @@ a:active,
     rgb(20 58 226 / 55%) 0%,
     rgb(36 198 219 / 55%) 100%
   );
-  border: 2px solid #24C5DB;
+  border: 2px solid #24c5db;
   border-radius: 30px;
   transform: translateX(-50%);
   backdrop-filter: blur(50px);

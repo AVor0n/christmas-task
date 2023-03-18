@@ -1,4 +1,4 @@
-.start-page{
+.start-page {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,18 +11,18 @@
   background-size: cover;
 }
 
-.start-page__content{
+.start-page__content {
   text-align: center;
 }
 
-.start-page__title{
+.start-page__title {
   padding: 60px 80px;
   font-size: 4rem;
   text-transform: uppercase;
   border-radius: 30px;
 }
 
-.start-page__button{
+.start-page__button {
   display: inline-block;
   margin-top: 100px;
   padding: 12px 120px;

@@ -47,8 +47,8 @@
 }
 
 .filters__search:focus::placeholder,
-.filters__search:hover::placeholder{
-  color: rgb(194 194 194)
+.filters__search:hover::placeholder {
+  color: rgb(194 194 194);
 }
 
 .filters__search:hover,
@@ -268,21 +268,21 @@
 
 @media (max-width: 1550px) {
   .toys__container {
-  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 1300px) {
   .toys__container {
-  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 1050px) {
   .toys__container {
-  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+    /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
     grid-template-columns: repeat(2, 1fr);
   }
 }

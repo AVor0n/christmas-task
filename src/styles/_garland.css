@@ -46,15 +46,31 @@
   animation-duration: 1.4s;
 }
 
-.lightrope li.red { animation-name: red; }
-.lightrope li.green { animation-name: green; }
-.lightrope li.blue { animation-name: blue; }
-.lightrope li.yellow { animation-name: yellow; }
+.lightrope li.red {
+  animation-name: red;
+}
+.lightrope li.green {
+  animation-name: green;
+}
+.lightrope li.blue {
+  animation-name: blue;
+}
+.lightrope li.yellow {
+  animation-name: yellow;
+}
 
-.lightrope li.multicolor:nth-child(1n + 1) { animation-name: red; }
-.lightrope li:nth-child(2n + 2).multicolor { animation-name: green; }
-.lightrope li:nth-child(3n + 3).multicolor { animation-name: blue; }
-.lightrope li:nth-child(4n + 4).multicolor { animation-name: yellow; }
+.lightrope li.multicolor:nth-child(1n + 1) {
+  animation-name: red;
+}
+.lightrope li:nth-child(2n + 2).multicolor {
+  animation-name: green;
+}
+.lightrope li:nth-child(3n + 3).multicolor {
+  animation-name: blue;
+}
+.lightrope li:nth-child(4n + 4).multicolor {
+  animation-name: yellow;
+}
 
 @keyframes green {
   0%,

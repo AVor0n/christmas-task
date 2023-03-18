@@ -1,11 +1,9 @@
-import Router from './utils/Router';
-
+import toysController from './controllers/toys';
+import treeController from './controllers/tree';
 import startPage from './pages/start.html';
 import toysPage from './pages/toys.html';
 import treePage from './pages/tree.html';
-
-import toysController from './controllers/toys';
-import treeController from './controllers/tree';
+import Router from './utils/Router';
 
 const router = new Router();
 

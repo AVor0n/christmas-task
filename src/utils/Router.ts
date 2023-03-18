@@ -1,4 +1,7 @@
-type Route = { path: string; cb: () => void };
+interface Route {
+  path: string;
+  cb: () => void;
+}
 
 class Router {
   routes: Set<Route>;
@@ -12,7 +15,7 @@ class Router {
   }
 
   private static normalize(path: string) {
-    return path.replace(/^\/|#\/|\/$/g, '');
+    return path.replace(/^\/|#\/|\/$/gu, '');
   }
 
   add = (href: string, cb: () => void) => {
