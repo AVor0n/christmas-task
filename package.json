@@ -11,7 +11,8 @@
     "dev": "webpack serve",
     "lint": "eslint ./src --ext .ts --fix",
     "lint:style": "stylelint ./src/styles/ --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "browserslist": [
     "defaults",
@@ -42,6 +43,8 @@
     "eslint-plugin-unicorn": "^46.0.0",
     "html-loader": "^3.0.1",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.0",
     "mini-css-extract-plugin": "^2.4.5",
     "postcss": "^8.3.11",
     "postcss-import": "^14.0.2",
