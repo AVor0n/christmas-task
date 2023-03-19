@@ -3,11 +3,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
+/** @type {import('webpack').Configuration} */
 const config = {
   entry: './src/index.ts',
   output: {
@@ -54,6 +55,7 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    plugins: [new TsconfigPathsPlugin()],
   },
 };
 
