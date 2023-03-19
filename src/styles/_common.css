@@ -38,21 +38,13 @@ a:active,
 }
 
 .glass-effect {
-  background: radial-gradient(
-    118.88% 606.86% at 0% 0%,
-    rgb(36 197 219 / 15%) 0%,
-    rgb(36 197 219 / 0%) 100%
-  );
+  background: radial-gradient(118.88% 606.86% at 0% 0%, rgb(36 197 219 / 15%) 0%, rgb(36 197 219 / 0%) 100%);
   border: 2px solid #24c5db;
   backdrop-filter: blur(31px);
 }
 
 .gold-glass-effect {
-  background: radial-gradient(
-    118.88% 606.86% at 0% 0%,
-    rgb(255 215 0 / 15%) 0%,
-    rgb(255 215 0 / 0%) 100%
-  );
+  background: radial-gradient(118.88% 606.86% at 0% 0%, rgb(255 215 0 / 15%) 0%, rgb(255 215 0 / 0%) 100%);
   border: 2px solid rgb(255 215 0);
   backdrop-filter: blur(31px);
 }
@@ -77,11 +69,7 @@ a:active,
   color: white;
   font-size: 3rem;
   text-align: center;
-  background: radial-gradient(
-    118.88% 606.86% at 0% 0%,
-    rgb(20 58 226 / 55%) 0%,
-    rgb(36 198 219 / 55%) 100%
-  );
+  background: radial-gradient(118.88% 606.86% at 0% 0%, rgb(20 58 226 / 55%) 0%, rgb(36 198 219 / 55%) 100%);
   border: 2px solid #24c5db;
   border-radius: 30px;
   transform: translateX(-50%);

@@ -3,7 +3,7 @@ interface Route {
   cb: () => void;
 }
 
-class Router {
+export class Router {
   routes: Set<Route>;
 
   constructor() {
@@ -50,5 +50,3 @@ class Router {
     }
   };
 }
-
-export default Router;

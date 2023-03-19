@@ -1,4 +1,6 @@
-const data: toyInfo[] = [
+import type { IToyInfo } from 'types';
+
+export const data: IToyInfo[] = [
   {
     id: '1',
     name: 'Большой шар с рисунком',
@@ -600,5 +602,3 @@ const data: toyInfo[] = [
     favorite: true,
   },
 ];
-
-export default data;

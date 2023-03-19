@@ -1,9 +1,11 @@
-/* eslint-disable no-loop-func */
 import noUiSlider from 'nouislider';
-import toysData from '../data';
-import message from '../ts/message';
-import SmoothShuffle from '../utils/SmoothShuffle';
+import { data } from '../data';
+import { message } from '../ts/message';
+import { SmoothShuffle } from '../ts/smoothShuffle';
+import { $, $$, LS } from '@utils';
+import type { IToyInfo, BoxOfToys } from '../../types/toy';
 import type { API } from 'nouislider';
+import type { ToyColor, ToyShape, ToySize } from 'types/unions';
 
 interface Range {
   from: number;
@@ -14,9 +16,9 @@ interface Filter {
   name: string;
   count: Range;
   year: Range;
-  shape: toyShape[];
-  color: toyColor[];
-  size: toySize[];
+  shape: ToyShape[];
+  color: ToyColor[];
+  size: ToySize[];
   favorite: boolean;
 }
 
@@ -24,26 +26,24 @@ interface Sort {
   prop: 'name' | 'year' | 'count';
   direction: 'up' | 'down';
 }
-interface Instanse extends HTMLElement {
+interface Instance extends HTMLElement {
   noUiSlider: API;
 }
 
-function toysPageController() {
-  const sortSelect = document.querySelector('#sortBy') as HTMLSelectElement;
-  const shapeBtns: NodeListOf<HTMLInputElement> =
-    document.querySelectorAll('.filter-shape__option');
-  const colorBtns: NodeListOf<HTMLInputElement> =
-    document.querySelectorAll('.filter-color__option');
-  const countSlider: Instanse = document.querySelector('.filter-count__slider');
-  const yearSlider: Instanse = document.querySelector('.filter-year__slider');
-  const sizeBtns: NodeListOf<HTMLInputElement> = document.querySelectorAll('.filter-size__option');
-  const favoriteBtn: HTMLInputElement = document.querySelector('.filter-favorite__option');
-  const resetFilter: HTMLButtonElement = document.querySelector('.reset-filter');
-  const resetSettings: HTMLButtonElement = document.querySelector('.reset-settings');
-  const backToTop: HTMLAnchorElement = document.querySelector('.back-to-top');
-  const searchInp: HTMLInputElement = document.querySelector('.filters__search');
-  const favoriteToys: BoxOfToys = JSON.parse(localStorage.getItem('favoriteToys')) || [];
-  const favoriteToysCounter: HTMLDivElement = document.querySelector('.toys__counter');
+export function toysPageController() {
+  const sortSelect = $<HTMLSelectElement>('#sortBy');
+  const shapeBtns = $$<HTMLInputElement>('.filter-shape__option');
+  const colorBtns = $$<HTMLInputElement>('.filter-color__option');
+  const countSlider = $<Instance>('.filter-count__slider');
+  const yearSlider = $<Instance>('.filter-year__slider');
+  const sizeBtns = $$<HTMLInputElement>('.filter-size__option');
+  const favoriteBtn = $<HTMLInputElement>('.filter-favorite__option');
+  const resetFilter = $<HTMLButtonElement>('.reset-filter');
+  const resetSettings = $<HTMLButtonElement>('.reset-settings');
+  const backToTop = $<HTMLAnchorElement>('.back-to-top');
+  const searchInp = $<HTMLInputElement>('.filters__search');
+  const favoriteToys = LS.getItem<BoxOfToys>('favoriteToys') ?? [];
+  const favoriteToysCounter = $<HTMLDivElement>('.toys__counter');
   favoriteToysCounter.textContent = `${favoriteToys.length}`;
 
   const UPDATE_DELAY = 500;
@@ -53,17 +53,25 @@ function toysPageController() {
   let maxCount = Number.NEGATIVE_INFINITY;
   let minCount = +Number.POSITIVE_INFINITY;
 
-  for (const toy of toysData) {
-    if (toy.year > maxYear) maxYear = toy.year;
-    if (toy.year < minYear) minYear = toy.year;
-    if (toy.count > maxCount) maxCount = toy.count;
-    if (toy.count < minCount) minCount = toy.count;
+  for (const toy of data) {
+    if (toy.year > maxYear) {
+      maxYear = toy.year;
+    }
+    if (toy.year < minYear) {
+      minYear = toy.year;
+    }
+    if (toy.count > maxCount) {
+      maxCount = toy.count;
+    }
+    if (toy.count < minCount) {
+      minCount = toy.count;
+    }
   }
 
-  document.querySelector('.filter-count__max-label').textContent = `${maxCount}`;
-  document.querySelector('.filter-count__min-label').textContent = `${minCount}`;
-  document.querySelector('.filter-year__max-label').textContent = `${maxYear}`;
-  document.querySelector('.filter-year__min-label').textContent = `${minYear}`;
+  $('.filter-count__max-label').textContent = `${maxCount}`;
+  $('.filter-count__min-label').textContent = `${minCount}`;
+  $('.filter-year__max-label').textContent = `${maxYear}`;
+  $('.filter-year__min-label').textContent = `${minYear}`;
 
   noUiSlider.create(countSlider, {
     start: [minCount, maxCount],
@@ -113,37 +121,40 @@ function toysPageController() {
     favorite: false,
   };
 
-  let filter: Filter = localStorage.getItem('filter')
-    ? JSON.parse(localStorage.getItem('filter'))
-    : defaultFilter;
+  const filter: Filter = LS.getItem('filter') ?? defaultFilter;
 
-  const sort: Sort = JSON.parse(localStorage.getItem('sort')) || {
+  const sort: Sort = LS.getItem('sort') ?? {
     prop: 'name',
     direction: 'up',
   };
 
-  const container: HTMLDivElement = document.querySelector('.toys__container');
-  let actualToysData: toyInfo[] = applySort(sort, applyFilter(filter, toysData));
+  const container = $<HTMLDivElement>('.toys__container');
+  let actualToysData: IToyInfo[] = applySort(sort, applyFilter(filter, data));
   const placeholder = document.createElement('p');
   placeholder.classList.add('toys__placeholder', 'glass-effect');
-  placeholder.innerHTML = 'Совпадений не найденно. <br>Попробуйте другую комбинацию фильтров';
-  const ss = new SmoothShuffle<toyInfo>(container, actualToysData, toyCreator, placeholder);
+  for (const text of ['Совпадений не найдено.', 'Попробуйте другую комбинацию фильтров']) {
+    const $line = document.createElement('p');
+    $line.textContent = text;
+    placeholder.append($line);
+  }
+  const ss = new SmoothShuffle<IToyInfo>(container, actualToysData, toyCreator, placeholder);
 
   restoreFilters();
   searchInp.focus();
   //* * ---------- Обработчики -----------------------------
-  window.addEventListener('scroll', () => {
-    backToTop.style.visibility =
-      window.scrollY > document.documentElement.clientHeight ? 'visible' : 'hidden';
+  // eslint-disable-next-line compat/compat
+  const observer = new IntersectionObserver(() => {
+    backToTop.style.visibility = window.scrollY > document.documentElement.clientHeight ? 'visible' : 'hidden';
   });
+  observer.observe(document.body);
 
   backToTop.addEventListener('click', () => {
     window.scrollTo(0, 0);
   });
 
   sortSelect.addEventListener('change', () => {
-    const [sortProp, sortDirecttion] = sortSelect.value.split('-');
-    sort.direction = sortDirecttion as 'up' | 'down';
+    const [sortProp, sortDirection] = sortSelect.value.split('-');
+    sort.direction = sortDirection as 'up' | 'down';
     sort.prop = sortProp as 'year' | 'count' | 'name';
     updateToysView();
   });
@@ -169,12 +180,15 @@ function toysPageController() {
 
   for (const shapeBtn of shapeBtns) {
     shapeBtn.addEventListener('click', () => {
-      const shapeValue = shapeBtn.dataset.value as toyShape;
+      const shapeValue = shapeBtn.getAttribute('value') as ToyShape;
 
       const i = filter.shape.indexOf(shapeValue);
 
-      if (i === -1) filter.shape.push(shapeValue);
-      else filter.shape.splice(i, 1);
+      if (i === -1) {
+        filter.shape.push(shapeValue);
+      } else {
+        filter.shape.splice(i, 1);
+      }
 
       updateToysView();
     });
@@ -182,12 +196,15 @@ function toysPageController() {
 
   for (const colorBtn of colorBtns) {
     colorBtn.addEventListener('click', () => {
-      const colorValue = colorBtn.dataset.value as toyColor;
+      const colorValue = colorBtn.getAttribute('value') as ToyColor;
 
       const i = filter.color.indexOf(colorValue);
 
-      if (i === -1) filter.color.push(colorValue);
-      else filter.color.splice(i, 1);
+      if (i === -1) {
+        filter.color.push(colorValue);
+      } else {
+        filter.color.splice(i, 1);
+      }
 
       updateToysView();
     });
@@ -195,12 +212,15 @@ function toysPageController() {
 
   for (const sizeBtn of sizeBtns) {
     sizeBtn.addEventListener('click', () => {
-      const sizeValue = sizeBtn.dataset.value as toySize;
+      const sizeValue = sizeBtn.getAttribute('value') as ToySize;
 
       const i = filter.size.indexOf(sizeValue);
 
-      if (i === -1) filter.size.push(sizeValue);
-      else filter.size.splice(i, 1);
+      if (i === -1) {
+        filter.size.push(sizeValue);
+      } else {
+        filter.size.splice(i, 1);
+      }
 
       updateToysView();
     });
@@ -212,27 +232,31 @@ function toysPageController() {
   });
 
   resetFilter.addEventListener('click', () => {
-    filter = {
-      name: '',
-      count: {
-        from: minCount,
-        to: maxCount,
-      },
-      year: {
-        from: minYear,
-        to: maxYear,
-      },
-      shape: [],
-      color: [],
-      size: [],
-      favorite: false,
+    filter.name = '';
+    filter.count = {
+      from: minCount,
+      to: maxCount,
     };
+    filter.year = {
+      from: minYear,
+      to: maxYear,
+    };
+    filter.shape = [];
+    filter.color = [];
+    filter.size = [];
+    filter.favorite = false;
     searchInp.value = '';
     yearSlider.noUiSlider.reset();
     countSlider.noUiSlider.reset();
-    for (const colorBtn of colorBtns) colorBtn.checked = false;
-    for (const shapeBtn of shapeBtns) shapeBtn.checked = false;
-    for (const sizeBtn of sizeBtns) sizeBtn.checked = false;
+    for (const colorBtn of colorBtns) {
+      colorBtn.checked = false;
+    }
+    for (const shapeBtn of shapeBtns) {
+      shapeBtn.checked = false;
+    }
+    for (const sizeBtn of sizeBtns) {
+      sizeBtn.checked = false;
+    }
     favoriteBtn.checked = false;
 
     updateToysView();
@@ -242,7 +266,7 @@ function toysPageController() {
     resetFilter.click();
     localStorage.clear();
     favoriteToys.length = 0;
-    const toys: NodeListOf<HTMLDivElement> = document.querySelectorAll('.toy');
+    const toys = $$<HTMLDivElement>('.toy');
     for (const toy of toys) {
       toy.classList.add('glass-effect');
       toy.classList.remove('gold-glass-effect');
@@ -254,12 +278,12 @@ function toysPageController() {
     clearTimeout(timerId);
     localStorage.setItem('filter', JSON.stringify(filter));
     localStorage.setItem('sort', JSON.stringify(sort));
-    actualToysData = applyFilter(filter, toysData);
+    actualToysData = applyFilter(filter, data);
     actualToysData = applySort(sort, actualToysData);
     timerId = window.setTimeout(() => ss.update(actualToysData), UPDATE_DELAY);
   }
 
-  function toyCreator(toyData: toyInfo) {
+  function toyCreator(toyData: IToyInfo) {
     const toy = document.createElement('div');
     const toyTitle = document.createElement('span');
     const toyImage = document.createElement('img');
@@ -278,7 +302,7 @@ function toysPageController() {
     const toySize = document.createElement('span');
     const toyFavorite = document.createElement('span');
 
-    if (favoriteToys.find((favoriteToy) => favoriteToy.id === toyData.id)) {
+    if (favoriteToys.some((favoriteToy) => favoriteToy.id === toyData.id)) {
       toy.classList.add('toy', 'gold-glass-effect');
     } else {
       toy.classList.add('toy', 'glass-effect');
@@ -292,11 +316,8 @@ function toysPageController() {
           favoriteToys.push({ id: toyData.id, count: toyData.count });
           favoriteToysCounter.textContent = `${Number(favoriteToysCounter.textContent) + 1}`;
         } else {
-          message(
-            3000,
-            'Все слоты заполнены',
-            `Максимальное количество избранных игрушек: ${MAX_FAVORITE_TOYS}`,
-          );
+          const delay = 300;
+          message(delay, 'Все слоты заполнены', `Максимальное количество избранных игрушек: ${MAX_FAVORITE_TOYS}`);
           return;
         }
       } else {
@@ -369,17 +390,17 @@ function toysPageController() {
     yearSlider.noUiSlider.set([filter.year.from, filter.year.to]);
 
     for (const shapeBtn of shapeBtns) {
-      const shape = shapeBtn.dataset.value as toyShape;
+      const shape = shapeBtn.getAttribute('value') as ToyShape;
       shapeBtn.checked = !!filter.shape.includes(shape);
     }
 
     for (const colorBtn of colorBtns) {
-      const color = colorBtn.dataset.value as toyColor;
+      const color = colorBtn.getAttribute('value') as ToyColor;
       colorBtn.checked = !!filter.color.includes(color);
     }
 
     for (const sizeBtn of sizeBtns) {
-      const size = sizeBtn.dataset.value as toySize;
+      const size = sizeBtn.getAttribute('value') as ToySize;
       sizeBtn.checked = !!filter.size.includes(size);
     }
 
@@ -387,57 +408,63 @@ function toysPageController() {
   }
 }
 
-function applyFilter(filter: Filter, toyData: toyInfo[]) {
-  let data = [...toyData];
+function applyFilter(filter: Filter, toyData: IToyInfo[]) {
+  let filteredData = [...toyData];
 
   if (filter.name) {
     const regex = new RegExp(filter.name, 'i');
-    data = data.filter((toy) => regex.test(toy.name));
+    filteredData = filteredData.filter((toy) => regex.test(toy.name));
   }
 
-  if (filter.count) {
-    data = data.filter((toy) => filter.count.from <= toy.count && toy.count <= filter.count.to);
-  }
+  filteredData = filteredData.filter((toy) => filter.count.from <= toy.count && toy.count <= filter.count.to);
 
-  if (filter.year) {
-    data = data.filter((toy) => filter.year.from <= toy.year && toy.year <= filter.year.to);
-  }
+  filteredData = filteredData.filter((toy) => filter.year.from <= toy.year && toy.year <= filter.year.to);
 
   if (filter.color.length > 0) {
-    data = data.filter((toy) => filter.color.includes(toy.color));
+    filteredData = filteredData.filter((toy) => filter.color.includes(toy.color));
   }
 
   if (filter.shape.length > 0) {
-    data = data.filter((toy) => filter.shape.includes(toy.shape));
+    filteredData = filteredData.filter((toy) => filter.shape.includes(toy.shape));
   }
 
   if (filter.size.length > 0) {
-    data = data.filter((toy) => filter.size.includes(toy.size));
+    filteredData = filteredData.filter((toy) => filter.size.includes(toy.size));
   }
 
   if (filter.favorite) {
-    data = data.filter((toy) => toy.favorite);
+    filteredData = filteredData.filter((toy) => toy.favorite);
   }
 
-  return data;
+  return filteredData;
 }
 
-function applySort(sort: Sort, toyData: toyInfo[]) {
+function applySort(sort: Sort, toyData: IToyInfo[]) {
   const collator = new Intl.Collator('ru');
 
   if (sort.direction === 'up') {
-    if (sort.prop === 'name') toyData.sort((toy1, toy2) => collator.compare(toy1.name, toy2.name));
-    if (sort.prop === 'year') toyData.sort((toy1, toy2) => toy1.year - toy2.year);
-    if (sort.prop === 'count') toyData.sort((toy1, toy2) => toy1.count - toy2.count);
+    if (sort.prop === 'name') {
+      toyData.sort((toy1, toy2) => collator.compare(toy1.name, toy2.name));
+    }
+    if (sort.prop === 'year') {
+      toyData.sort((toy1, toy2) => toy1.year - toy2.year);
+    }
+    if (sort.prop === 'count') {
+      toyData.sort((toy1, toy2) => toy1.count - toy2.count);
+    }
   }
 
   if (sort.direction === 'down') {
-    if (sort.prop === 'name') toyData.sort((toy1, toy2) => collator.compare(toy2.name, toy1.name));
-    if (sort.prop === 'year') toyData.sort((toy1, toy2) => toy2.year - toy1.year);
-    if (sort.prop === 'count') toyData.sort((toy1, toy2) => toy2.count - toy1.count);
+    if (sort.prop === 'name') {
+      toyData.sort((toy1, toy2) => collator.compare(toy2.name, toy1.name));
+    }
+    if (sort.prop === 'year') {
+      toyData.sort((toy1, toy2) => toy2.year - toy1.year);
+    }
+    if (sort.prop === 'count') {
+      toyData.sort((toy1, toy2) => toy2.count - toy1.count);
+    }
   }
 
   return toyData;
 }
-
-export default toysPageController;

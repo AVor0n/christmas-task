@@ -2,11 +2,15 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "types": ["types"],
       "@src/*": ["src/*"],
-      "@types/*": ["types/*"],
-      "@assets/*": ["assets/*"],
-      "@styles/*": ["styles/*"]
+      "@utils": ["src/utils"],
+      "@pages": ["src/pages"],
+      "@styles": ["src/styles"],
+      "@assets/*": ["src/assets/*"],
+      "@controllers": ["src/controllers"]
     },
+    "target": "ES2015",
     // https://www.sitepoint.com/react-with-typescript-best-practices/
     "skipLibCheck": true, // Пропустить проверку во типов всех файлах объявлений.
     "esModuleInterop": true, // Отключить импорт пространств имен.
@@ -25,5 +29,5 @@
     "noFallthroughCasesInSwitch": true, // Сообщать об ошибке при встрече кейсов fallthrough в инструкциях switch.
     "lib": ["DOM", "DOM.Iterable", "ESNext"]
   },
-  "include": ["src"]
+  "include": ["src", "types"]
 }

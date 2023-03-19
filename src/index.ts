@@ -1,4 +1,5 @@
 import 'nouislider/dist/nouislider.css';
+import { initRouter } from './router';
 import './styles/index.css';
 
-import './router';
+initRouter();

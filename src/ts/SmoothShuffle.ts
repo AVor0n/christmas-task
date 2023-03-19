@@ -2,38 +2,31 @@ interface DataItem {
   id: string;
 }
 
-// eslint-disable-next-line no-unused-vars
-type ItemCreator = (data: DataItem) => HTMLDivElement;
-
-class SmoothShuffle<T extends DataItem> {
+type ItemCreator<T extends DataItem> = (data: T) => HTMLDivElement;
+export class SmoothShuffle<T extends DataItem> {
   readonly REMOVE_ITEM_DELAY = 600;
 
   container: HTMLDivElement;
 
-  columns: number;
+  columns = 0;
 
-  columnWidth: number;
+  columnWidth = 0;
 
-  itemWidth: number;
+  itemWidth = 0;
 
-  itemHeigth: number;
+  itemHeight = 0;
 
-  gapX: number;
+  gapX = 0;
 
-  gapY: number;
+  gapY = 0;
 
   items: HTMLDivElement[];
 
-  itemCreator: ItemCreator;
+  itemCreator: ItemCreator<T>;
 
   placeHolder: HTMLElement;
 
-  constructor(
-    container: HTMLDivElement,
-    data: T[],
-    itemCreator: ItemCreator,
-    placeHolder: HTMLElement,
-  ) {
+  constructor(container: HTMLDivElement, data: T[], itemCreator: ItemCreator<T>, placeHolder: HTMLElement) {
     this.container = container;
     this.itemCreator = itemCreator;
     this.placeHolder = placeHolder;
@@ -44,14 +37,16 @@ class SmoothShuffle<T extends DataItem> {
     this.items = [];
     this.update(data);
 
-    window.addEventListener('resize', () => {
+    // eslint-disable-next-line compat/compat
+    const observer = new ResizeObserver(() => {
       this.getItemInfo(data[0]);
       this.getGridInfo();
       for (let i = 0; i < this.items.length; i++) {
         this.moveItem(this.items[i], i);
       }
-      this.updateHeigthContainer();
+      this.updateHeightContainer();
     });
+    observer.observe(document.body);
   }
 
   private createItem(dataItem: T, idx: number) {
@@ -113,29 +108,27 @@ class SmoothShuffle<T extends DataItem> {
         this.items.push(item);
       }
     }
-    this.updateHeigthContainer();
+    this.updateHeightContainer();
     return this.items;
   }
 
   private readonly offsetCenter = () => (this.columnWidth - this.itemWidth) / 2;
 
-  private readonly getXbyIdx = (idx: number) =>
-    (idx % this.columns) * (this.gapX + this.columnWidth) + this.offsetCenter();
+  private readonly getXbyIdx = (idx: number) => {
+    const columnIdx = idx % this.columns;
+    return columnIdx * (this.gapX + this.columnWidth) + this.offsetCenter();
+  };
 
-  private readonly getYbyIdx = (idx: number) =>
-    Math.floor(idx / this.columns) * (this.gapY + this.itemHeigth);
+  private readonly getYbyIdx = (idx: number) => Math.floor(idx / this.columns) * (this.gapY + this.itemHeight);
 
-  private readonly updateHeigthContainer = () => {
+  private readonly updateHeightContainer = () => {
     this.container.style.height = `${
-      Math.ceil(this.items.length / this.columns) * (this.itemHeigth + this.gapY) - this.gapY
+      Math.ceil(this.items.length / this.columns) * (this.itemHeight + this.gapY) - this.gapY
     }px`;
   };
 
   getGridInfo() {
-    const columns = window
-      .getComputedStyle(this.container)
-      .gridTemplateColumns.replace('px', '')
-      .split(' ');
+    const columns = window.getComputedStyle(this.container).gridTemplateColumns.replace('px', '').split(' ');
     const gaps = window.getComputedStyle(this.container).gap.replace(/px/gu, '').split(' ');
     this.columnWidth = Number(columns[0]);
     this.gapX = gaps[1] ? Number(gaps[1]) : Number(gaps[0]) || 0;
@@ -147,10 +140,8 @@ class SmoothShuffle<T extends DataItem> {
     const item = this.itemCreator(dataItem);
     this.container.append(item);
     const itemInfo = window.getComputedStyle(item);
-    this.itemHeigth = Number.parseFloat(itemInfo.height);
+    this.itemHeight = Number.parseFloat(itemInfo.height);
     this.itemWidth = Number.parseFloat(itemInfo.width);
     item.remove();
   }
 }
-
-export default SmoothShuffle;

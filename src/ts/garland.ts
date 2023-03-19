@@ -1,4 +1,8 @@
-export default class Garland {
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+import { $ } from '@utils';
+import type { GarlandColor } from 'types';
+
+export class Garland {
   readonly container: HTMLElement;
 
   readonly countLines: number;
@@ -14,13 +18,13 @@ export default class Garland {
     this.countLines = countLines > 0 ? countLines : 1;
     this.curvature = curvature > 0 ? curvature : 0.01;
     this.gap = gap;
-    this.color = color || '';
+    this.color = color ?? '';
     this.createGarland();
   }
 
   private static initContainer() {
-    const container: HTMLElement = document.querySelector('.garland-container');
-    const treeImage: HTMLImageElement = document.querySelector('.tree__image');
+    const container = $<HTMLElement>('.garland-container');
+    const treeImage = $<HTMLImageElement>('.tree__image');
     const treePosition = treeImage.getBoundingClientRect();
     const contPosition = container.getBoundingClientRect();
 
@@ -32,13 +36,17 @@ export default class Garland {
     return container;
   }
 
-  private createGarland() {
-    const arcTop = (n: number) => n * (this.container.clientHeight / (this.countLines + 1));
-    const arcWidth = (n: number) =>
-      (arcTop(n) / this.container.clientHeight) * this.container.clientWidth;
+  private arcTop(n: number) {
+    return n * (this.container.clientHeight / (this.countLines + 1));
+  }
 
+  private arcWidth(n: number) {
+    return (this.arcTop(n) / this.container.clientHeight) * this.container.clientWidth;
+  }
+
+  private createGarland() {
     for (let num = 1; num <= this.countLines; num++) {
-      this.createArc(arcTop(num), arcWidth(num), this.curvature);
+      this.createArc(this.arcTop(num), this.arcWidth(num), this.curvature);
     }
   }
 
@@ -69,21 +77,27 @@ export default class Garland {
 
   private createTwinkle(arc: HTMLUListElement, radius: number, angle: number) {
     const twinkle = document.createElement('li');
-    if (this.color) twinkle.classList.add(this.color);
+    if (this.color) {
+      twinkle.classList.add(this.color);
+    }
     twinkle.style.transform = `rotate(${angle - 90}deg) translate(${radius}px)`;
     arc.append(twinkle);
   }
 
   setColor(color: GarlandColor) {
-    const garland: HTMLElement = document.querySelector('.garland-container');
-    const arcs = garland.children;
+    const garland = $<HTMLElement>('.garland-container');
+    const arcs = [...garland.children];
 
     for (const arc of arcs) {
       const twinkles = arc.children;
 
       for (const twinkle of twinkles) {
-        if (this.color) twinkle.classList.remove(this.color);
-        if (color) twinkle.classList.add(color);
+        if (this.color) {
+          twinkle.classList.remove(this.color);
+        }
+        if (color) {
+          twinkle.classList.add(color);
+        }
       }
     }
 
