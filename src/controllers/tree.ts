@@ -117,7 +117,7 @@ function setTree(id: number | string) {
   const treeImg = $<HTMLImageElement>('.tree__image');
   const treeArea = $<HTMLAreaElement>('.tree__area');
 
-  treeImg.src = `../assets/tree/${id}.png`;
+  treeImg.src = `./assets/tree/${id}.png`;
   treeArea.coords = TREE_COORDS[id];
   treeBtn.checked = true;
   localStorage.setItem('treeId', String(id));
@@ -138,7 +138,7 @@ function setTreeBackground(id: number | string) {
   id = Number(id) || 1;
   const treeBgBtn = $<HTMLInputElement>(`.bg-item-input[data-id="${id}"]`);
   const treeImgBack = $<HTMLImageElement>('.tree-back');
-  treeImgBack.style.backgroundImage = `url('../assets/bg/${id}.jpg')`;
+  treeImgBack.style.backgroundImage = `url('./assets/bg/${id}.jpg')`;
   treeBgBtn.checked = true;
   localStorage.setItem('treeBackId', String(id));
 }
@@ -196,7 +196,7 @@ function setToys(toysOnTree: ToyPosition[], boxOfToys: BoxOfToys) {
 function createToyImage(id: number | string) {
   id = String(id);
   const toyImage = document.createElement('img');
-  toyImage.src = `../assets/toys/${id}.png`;
+  toyImage.src = `./assets/toys/${id}.png`;
   toyImage.width = 60;
   toyImage.height = 60;
   toyImage.style.cursor = 'grab';
@@ -547,7 +547,7 @@ function initSavedTrees() {
     container.addEventListener('click', () => restoreStateOfApp(state));
 
     const treeImg = document.createElement('img');
-    treeImg.src = `../assets/tree/${state.treeImageId}.png`;
+    treeImg.src = `./assets/tree/${state.treeImageId}.png`;
     treeImg.classList.add('tree__image');
     tree.append(treeImg);
 
