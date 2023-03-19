@@ -6,11 +6,13 @@
   "description": "",
   "private": true,
   "main": "src/index.ts",
+  "homepage": "https://AVor0n/github.io/christmas-task",
   "scripts": {
     "build": "webpack --node-env=production",
     "dev": "webpack serve",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -b gh-pages -d dist",
     "lint": "eslint ./src --ext .ts --fix",
-    "lint:style": "stylelint ./src/styles/ --fix",
     "format": "prettier --write .",
     "prepare": "husky install"
   },
@@ -43,6 +45,7 @@
     "eslint-plugin-regexp": "^1.12.0",
     "eslint-plugin-toplevel": "^1.0.1",
     "eslint-plugin-unicorn": "^46.0.0",
+    "gh-pages": "^5.0.0",
     "html-loader": "^3.0.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.0",
