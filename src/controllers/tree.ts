@@ -5,9 +5,7 @@ import { data } from '../data';
 import { Garland } from '../ts/garland';
 import { message } from '../ts/message';
 import { $, $$, LS } from '@src/utils';
-import type { IAppState } from '../../types/app';
-import type { BoxOfToys, ToyPosition } from '../../types/toy';
-import type { GarlandColor } from 'types';
+import type { IAppState, BoxOfToys, ToyPosition, GarlandColor } from 'types';
 
 let garland: Garland;
 
@@ -24,7 +22,8 @@ export function treePageController() {
   const countLines = 4;
   const curvature = 0.4;
   const gap = 20;
-  garland = new Garland(countLines, curvature, gap, garlandColor);
+  const garlandContainer = $<HTMLInputElement>('.garland-container');
+  garland = new Garland(garlandContainer, { countLines, curvature, gap, color: garlandColor });
   const garlandBtns = $$<HTMLInputElement>('.garland-option');
   for (const garlandBtn of garlandBtns) {
     garlandBtn.checked = garlandBtn.getAttribute('value') === garlandColor;

@@ -1,5 +1,5 @@
+import type { GarlandColor } from './garland';
 import type { BoxOfToys, ToyPosition } from './toy';
-import type { GarlandColor } from './unions';
 
 export interface IAppState {
   toysOnTree: ToyPosition[];

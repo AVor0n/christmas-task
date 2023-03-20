@@ -1,10 +1,16 @@
 .garland-container {
+
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   display: flex;
   justify-content: center;
+
+  /* tree__image sizes */
+  width: 406px;
+  height: 580px;
   overflow: hidden;
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
@@ -49,12 +55,15 @@
 .lightrope li.red {
   animation-name: red;
 }
+
 .lightrope li.green {
   animation-name: green;
 }
+
 .lightrope li.blue {
   animation-name: blue;
 }
+
 .lightrope li.yellow {
   animation-name: yellow;
 }
@@ -62,12 +71,15 @@
 .lightrope li.multicolor:nth-child(1n + 1) {
   animation-name: red;
 }
+
 .lightrope li:nth-child(2n + 2).multicolor {
   animation-name: green;
 }
+
 .lightrope li:nth-child(3n + 3).multicolor {
   animation-name: blue;
 }
+
 .lightrope li:nth-child(4n + 4).multicolor {
   animation-name: yellow;
 }

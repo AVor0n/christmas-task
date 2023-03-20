@@ -1,7 +1,7 @@
 import startPage from './pages/start.html';
 import toysPage from './pages/toys.html';
 import treePage from './pages/tree.html';
-import { Router } from './ts/router';
+import { Router } from './ts/Router';
 import { toysPageController, treePageController } from '@controllers';
 
 function goToPage(pageContent: string, pageController?: () => void) {

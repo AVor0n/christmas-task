@@ -1,55 +1,57 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { $ } from '@utils';
-import type { GarlandColor } from 'types';
+import type { GarlandColor, GarlandProps } from 'types';
 
 export class Garland {
+  /** Контейнер для отрисовки гирлянды */
   readonly container: HTMLElement;
 
-  readonly countLines: number;
+  /** Параметры гирлянды */
+  readonly options: GarlandProps;
 
-  readonly curvature: number; // 0 < curvature <= 1; 0 - прямая, 1 - окружность
-
-  readonly gap: number;
-
-  color: GarlandColor;
-
-  constructor(countLines: number, curvature: number, gap: number, color?: GarlandColor) {
-    this.container = Garland.initContainer();
-    this.countLines = countLines > 0 ? countLines : 1;
-    this.curvature = curvature > 0 ? curvature : 0.01;
-    this.gap = gap;
-    this.color = color ?? '';
-    this.createGarland();
+  /** Цвет гирлянды. Алиас для this.options.color */
+  get color() {
+    return this.options.color;
   }
 
-  private static initContainer() {
-    const container = $<HTMLElement>('.garland-container');
-    const treeImage = $<HTMLImageElement>('.tree__image');
-    const treePosition = treeImage.getBoundingClientRect();
-    const contPosition = container.getBoundingClientRect();
-
-    container.style.width = `${treePosition.width}px`;
-    container.style.height = `${treePosition.height}px`;
-    container.style.top = `${treePosition.y - contPosition.y}px`;
-    container.style.left = `${treePosition.x - contPosition.x}px`;
-
-    return container;
+  /**
+   * Создает гирлянду с заданными параметрами внутри контейнера
+   * @param container контейнер, в котором необходимо отрисовать гирлянду
+   * @param options параметры гирлянды
+   */
+  constructor(container: HTMLElement, options: GarlandProps) {
+    this.container = container;
+    this.options = options;
+    this.container.append(...this.createGarland());
   }
 
-  private arcTop(n: number) {
-    return n * (this.container.clientHeight / (this.countLines + 1));
+  /**
+   * Вычисляет отступ сверху для ряда гирлянды по индексу
+   * @param idx индекс ряда
+   */
+  private arcTop(idx: number) {
+    return idx * (this.container.clientHeight / (this.options.countLines + 1));
   }
 
-  private arcWidth(n: number) {
-    return (this.arcTop(n) / this.container.clientHeight) * this.container.clientWidth;
+  /**
+   * Вычисляет ширину ряда гирлянды по индексу
+   * @param idx индекс ряда
+   */
+  private arcWidth(idx: number) {
+    return (this.arcTop(idx) / this.container.clientHeight) * this.container.clientWidth;
   }
 
+  /** Создает массив HTML-элементов, представляющих контейнеры с рядами лампочек гирлянды */
   private createGarland() {
-    for (let num = 1; num <= this.countLines; num++) {
-      this.createArc(this.arcTop(num), this.arcWidth(num), this.curvature);
-    }
+    const arcs = Array.from({ length: this.options.countLines + 1 });
+    return arcs.map((_, idx) => this.createArc(this.arcTop(idx), this.arcWidth(idx), this.options.curvature));
   }
 
+  /**
+   * Создание ряда лампочек
+   * @param top отступ сверху
+   * @param width ширина
+   * @param curvature кривизна дуги
+   */
   private createArc(top: number, width: number, curvature: number) {
     const y = Math.sqrt((width / 2) ** 2 + ((curvature * width) / 2) ** 2); // гипотенуза
     const beta = Math.asin(width / (2 * y)); // угол при основании равнобедренного треугольника
@@ -61,39 +63,41 @@ export class Garland {
     arc.style.left = `${this.container.clientWidth / 2 - radius}px`;
     arc.style.width = `${2 * radius}px`;
     arc.style.height = `${2 * radius}px`;
-    this.container.append(arc);
 
     const a = (Math.PI - 2 * beta) * (180 / Math.PI); // угол равный половине дуги
-    const psi = (this.gap / radius) * (180 / Math.PI); // угол между огоньками
+    const psi = (this.options.gap / radius) * (180 / Math.PI); // угол между огоньками
     const countTwinkle = a / psi; // для половины дуги
 
-    this.createTwinkle(arc, radius, 180);
-
+    arc.append(this.createTwinkle(radius, 180));
     for (let i = 1; i <= countTwinkle; i++) {
-      this.createTwinkle(arc, radius, 180 + psi * i);
-      this.createTwinkle(arc, radius, 180 - psi * i);
+      arc.append(this.createTwinkle(radius, 180 + psi * i), this.createTwinkle(radius, 180 - psi * i));
     }
+    return arc;
   }
 
-  private createTwinkle(arc: HTMLUListElement, radius: number, angle: number) {
+  /**
+   * Создает лампочку в ряду-дуге
+   * @param radius радиус дуги
+   * @param angle угол на дуге, позиционирующий лампочку
+   */
+  private createTwinkle(radius: number, angle: number) {
     const twinkle = document.createElement('li');
-    if (this.color) {
-      twinkle.classList.add(this.color);
+    if (this.options.color) {
+      twinkle.classList.add(this.options.color);
     }
     twinkle.style.transform = `rotate(${angle - 90}deg) translate(${radius}px)`;
-    arc.append(twinkle);
+    return twinkle;
   }
 
+  /**
+   * Меняет цвет гирлянды
+   * @param color цвет
+   */
   setColor(color: GarlandColor) {
-    const garland = $<HTMLElement>('.garland-container');
-    const arcs = [...garland.children];
-
-    for (const arc of arcs) {
-      const twinkles = arc.children;
-
-      for (const twinkle of twinkles) {
-        if (this.color) {
-          twinkle.classList.remove(this.color);
+    for (const arc of this.container.children) {
+      for (const twinkle of arc.children) {
+        if (this.options.color) {
+          twinkle.classList.remove(this.options.color);
         }
         if (color) {
           twinkle.classList.add(color);
@@ -101,13 +105,18 @@ export class Garland {
       }
     }
 
-    this.color = color;
+    this.options.color = color;
   }
 
+  /** Выключить гирлянду */
   off() {
     this.setColor('');
   }
 
+  /**
+   * Включить гирлянду
+   * @param color цвет гирлянды. По-умолчанию: разноцветная
+   */
   on(color: GarlandColor = 'multicolor') {
     this.setColor(color);
   }
