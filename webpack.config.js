@@ -18,6 +18,9 @@ const config = {
   devServer: {
     open: true,
     host: 'localhost',
+    client: {
+      overlay: false,
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

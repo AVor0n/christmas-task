@@ -20,8 +20,8 @@
     "module": "esnext", // Указываем модуль генерации кода.
     "moduleResolution": "node", // Разрешение модулей в стиле Node.js
     "resolveJsonModule": true, // Включить модули, импортированные с расширением .json
-    "noUnusedLocals": true, // Сообщать об ошибке при неиспользованных локальных элементах (переменных, функциях, импортах).
-    "noUnusedParameters": true, // Сообщать об ошибке при неиспользуемых параметрах.
+    "noUnusedLocals": false, // Сообщать об ошибке при неиспользованных локальных элементах (переменных, функциях, импортах).
+    "noUnusedParameters": false, // Сообщать об ошибке при неиспользуемых параметрах.
     "experimentalDecorators": true, // Включить экспериментальную поддержку для декораторов ES.
     "noFallthroughCasesInSwitch": true, // Сообщать об ошибке при встрече кейсов fallthrough в инструкциях switch.
     "lib": ["DOM", "DOM.Iterable", "ESNext"]
