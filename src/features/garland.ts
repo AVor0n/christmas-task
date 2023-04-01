@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import type { GarlandColor, GarlandProps } from 'types';
 
 export class Garland {

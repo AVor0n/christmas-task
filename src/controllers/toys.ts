@@ -1,7 +1,7 @@
 import noUiSlider from 'nouislider';
+import { message } from '../core/message';
 import { data } from '../data';
-import { message } from '../ts/message';
-import { SmoothShuffle } from '../ts/smoothShuffle';
+import { SmoothShuffle } from '../features/smoothShuffle';
 import { $, $$, LS } from '@utils';
 import type { IToyInfo, BoxOfToys } from '../../types/toy';
 import type { API } from 'nouislider';

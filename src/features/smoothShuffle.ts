@@ -31,7 +31,9 @@ export class SmoothShuffle<T extends DataItem> {
     this.itemCreator = itemCreator;
     this.placeHolder = placeHolder;
 
-    if (data[0]) this.getItemInfo(data[0]);
+    if (data[0]) {
+      this.getItemInfo(data[0]);
+    }
     this.getGridInfo();
 
     this.items = [];
