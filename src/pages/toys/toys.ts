@@ -1,9 +1,9 @@
 import noUiSlider from 'nouislider';
-import { message } from '../core/message';
-import { data } from '../data';
-import { SmoothShuffle } from '../features/smoothShuffle';
+import { SmoothShuffle } from './modules/smoothShuffle';
+import { data } from '../../data';
+import { message } from '../../modules/message';
 import { $, $$, LS } from '@utils';
-import type { IToyInfo, BoxOfToys } from '../../types/toy';
+import type { IToyInfo, BoxOfToys } from '../../../types/toy';
 import type { API } from 'nouislider';
 import type { ToyColor, ToyShape, ToySize } from 'types/unions';
 
@@ -26,6 +26,7 @@ interface Sort {
   prop: 'name' | 'year' | 'count';
   direction: 'up' | 'down';
 }
+
 interface Instance extends HTMLElement {
   noUiSlider: API;
 }

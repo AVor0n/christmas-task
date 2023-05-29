@@ -1,8 +1,7 @@
-import { Router } from './core/router';
-import startPage from './pages/start.html';
-import toysPage from './pages/toys.html';
-import treePage from './pages/tree.html';
-import { toysPageController, treePageController } from '@controllers';
+import { Router } from './modules/router';
+import { startPage } from './pages/start';
+import { toysPage, toysPageController } from './pages/toys';
+import { treePage, treePageController } from './pages/tree';
 
 function goToPage(pageContent: string, pageController?: () => void) {
   const $main = document.querySelector('.main');

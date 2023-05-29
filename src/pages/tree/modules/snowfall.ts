@@ -1,4 +1,5 @@
 export class Snowfall {
+  // TODO: оптимизировать, вынести на другой слой, requestAnimationFrame
   container: HTMLDivElement;
 
   snowFlakeSpawnInterval: number;
