@@ -82,13 +82,7 @@
         "newlines-between": "never"
       }
     ],
-    "unicorn/filename-case": [
-      "error",
-      {
-        "case": "camelCase",
-        "ignore": ["import-\\w+.d.ts"]
-      }
-    ],
+    "unicorn/filename-case": "off",
     "@typescript-eslint/no-empty-interface": "off"
   },
   "overrides": [

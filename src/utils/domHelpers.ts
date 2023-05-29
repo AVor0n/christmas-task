@@ -30,16 +30,16 @@ export function $<T extends Element>(selector: string, container: Element | Docu
 export function $$<K extends keyof HTMLElementTagNameMap>(
   selectors: K,
   container?: Element | Document,
-): NodeListOf<HTMLElementTagNameMap[K]>;
+): HTMLElementTagNameMap[K][];
 export function $$<K extends keyof SVGElementTagNameMap>(
   selectors: K,
   container?: Element | Document,
-): NodeListOf<SVGElementTagNameMap[K]>;
-export function $$<E extends Element = Element>(selectors: string, container?: Element | Document): NodeListOf<E>;
+): SVGElementTagNameMap[K][];
+export function $$<E extends Element = Element>(selectors: string, container?: Element | Document): E[];
 export function $$<T extends Element>(selector: string, container: Element | Document = document) {
   const $$el = container.querySelectorAll<T>(selector);
   if ($$el.length === 0) {
     throw new Error(`Элементы с селектором '${selector}' не найдены`);
   }
-  return $$el;
+  return [...$$el];
 }

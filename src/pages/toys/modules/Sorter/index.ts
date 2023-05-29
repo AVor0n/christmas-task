@@ -1,0 +1,1 @@
+export { SorterViewModel } from './SorterViewModel';
