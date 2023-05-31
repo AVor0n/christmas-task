@@ -21,22 +21,15 @@ export function toysPageController() {
   favoriteToysCounter.textContent = `${favoriteToys.length}`;
 
   const container = $<HTMLDivElement>('.toys__container');
-  let actualToysData: IToyInfo[] = filterVM.filter([...data]);
-  const placeholder = document.createElement('p');
-  placeholder.classList.add('toys__placeholder', 'glass-effect');
-  for (const text of ['Совпадений не найдено.', 'Попробуйте другую комбинацию фильтров']) {
-    const $line = document.createElement('p');
-    $line.textContent = text;
-    placeholder.append($line);
-  }
+  const placeholder = $<HTMLTemplateElement>('#placeholder_template').content.cloneNode(true) as HTMLElement;
+
   const ss = new SmoothShuffle<IToyInfo>(
     container,
-    actualToysData,
+    [],
     (toyData) => toyCreator(toyData, favoriteToys, favoriteToysCounter),
     placeholder,
   );
 
-  //* * ---------- Обработчики -----------------------------
   resetSettings.addEventListener('click', () => {
     resetFilter.click();
     localStorage.clear();
@@ -50,7 +43,8 @@ export function toysPageController() {
   });
 
   function updateToysView() {
-    actualToysData = filterVM.filter([...data]);
+    const actualToysData = filterVM.filter([...data]);
     ss.update(actualToysData);
   }
+  updateToysView();
 }
