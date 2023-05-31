@@ -1,5 +1,5 @@
 import { LS } from '@utils';
-import type { Sort } from '../../types';
+import type { Sort } from './types';
 import type { IToyInfo } from 'types';
 
 export class SorterModel {

@@ -1,12 +1,18 @@
-import { UPDATE_DELAY } from './constants';
-import { FilterViewModel, SorterViewModel, SmoothShuffle, toyCreator } from './modules';
+import { FilterViewModel, SmoothShuffle, toyCreator } from './modules';
+import { getMinMax } from './utils';
 import { data } from '../../data';
 import { $, $$, LS } from '@utils';
 import type { IToyInfo, BoxOfToys } from '../../../types/toy';
 
 export function toysPageController() {
-  const filterVM = new FilterViewModel();
-  const sortVM = new SorterViewModel();
+  const filterVM = new FilterViewModel({
+    count: getMinMax(data.map((toy) => toy.count)),
+    year: getMinMax(data.map((toy) => toy.year)),
+  })
+    .init()
+    .onChange(() => updateToysView());
+
+  // const sortVM = new SorterViewModel();
 
   const resetFilter = $<HTMLButtonElement>('.reset-filter');
   const resetSettings = $<HTMLButtonElement>('.reset-settings');
@@ -14,10 +20,8 @@ export function toysPageController() {
   const favoriteToysCounter = $<HTMLDivElement>('.toys__counter');
   favoriteToysCounter.textContent = `${favoriteToys.length}`;
 
-  let timerId: number;
-
   const container = $<HTMLDivElement>('.toys__container');
-  let actualToysData: IToyInfo[] = sortVM.apply(filterVM.filter([...data]));
+  let actualToysData: IToyInfo[] = filterVM.filter([...data]);
   const placeholder = document.createElement('p');
   placeholder.classList.add('toys__placeholder', 'glass-effect');
   for (const text of ['Совпадений не найдено.', 'Попробуйте другую комбинацию фильтров']) {
@@ -46,10 +50,7 @@ export function toysPageController() {
   });
 
   function updateToysView() {
-    clearTimeout(timerId);
-    actualToysData = sortVM.apply(filterVM.filter([...data]));
-    timerId = window.setTimeout(() => ss.update(actualToysData), UPDATE_DELAY);
+    actualToysData = filterVM.filter([...data]);
+    ss.update(actualToysData);
   }
-
-  updateToysView();
 }

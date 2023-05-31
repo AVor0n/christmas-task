@@ -1,13 +1,13 @@
 import { LS } from '@utils';
-import type { Filter, Range } from '../../types';
-import type { IToyInfo, ToyColor, ToyShape, ToySize } from 'types';
+import type { Filter, Range } from './types';
+import type { DeepPartial, IToyInfo, ToyColor, ToyShape, ToySize } from 'types';
 
 export class FilterModel {
   private defaultState: Filter;
 
   private state: Filter;
 
-  private onChange: () => void;
+  private onChangeCallback?: (newFilterState: Filter) => void;
 
   get name() {
     return this.state.name;
@@ -41,20 +41,20 @@ export class FilterModel {
     return this.state;
   }
 
-  constructor(initState: Partial<Filter>, onChange = () => {}) {
+  constructor(initState: DeepPartial<Filter>) {
     this.defaultState = {
       name: initState.name ?? '',
       count: {
         min: initState.count?.min ?? 0,
         from: initState.count?.from ?? initState.count?.min ?? 0,
-        to: initState.count?.to ?? 0,
-        max: initState.count?.max ?? initState.count?.to ?? 0,
+        to: initState.count?.to ?? initState.count?.max ?? 0,
+        max: initState.count?.max ?? 0,
       },
       year: {
         min: initState.year?.min ?? 0,
         from: initState.year?.from ?? initState.year?.min ?? 0,
-        to: initState.year?.to ?? 0,
-        max: initState.year?.max ?? initState.year?.to ?? 0,
+        to: initState.year?.to ?? initState.year?.max ?? 0,
+        max: initState.year?.max ?? 0,
       },
       shape: initState.shape ?? [],
       color: initState.color ?? [],
@@ -62,9 +62,7 @@ export class FilterModel {
       favorite: initState.favorite ?? false,
     };
 
-    this.state = LS.getItem<Filter>('filter') ?? this.defaultState;
-
-    this.onChange = onChange;
+    this.state = LS.getItem<Filter>('filter') ?? structuredClone(this.defaultState);
   }
 
   apply(toyData: IToyInfo[]) {
@@ -85,10 +83,14 @@ export class FilterModel {
     });
   }
 
+  onChange(cb: (state: Filter) => void) {
+    this.onChangeCallback = cb;
+  }
+
   update(state: Filter) {
-    this.state = state;
+    this.state = structuredClone(state);
     LS.setItem('filter', this.state);
-    this.onChange();
+    this.onChangeCallback?.(this.state);
   }
 
   reset() {

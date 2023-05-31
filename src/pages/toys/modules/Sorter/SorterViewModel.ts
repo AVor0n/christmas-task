@@ -1,6 +1,6 @@
 import { SorterModel } from './SorterModel';
 import { $ } from '@utils';
-import type { Sort } from '../../types';
+import type { Sort } from './types';
 import type { IToyInfo } from 'types';
 
 export class SorterViewModel {

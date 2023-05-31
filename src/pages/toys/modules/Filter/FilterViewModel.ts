@@ -1,8 +1,8 @@
 import noUiSlider from 'nouislider';
 import { FilterModel } from './FilterModel';
 import { $, $$ } from '@utils';
-import type { Instance } from '../../types';
-import type { IToyInfo, ToyColor, ToyShape, ToySize } from 'types';
+import type { Filter, Instance, Range } from './types';
+import type { DeepPartial, IToyInfo, KeysOfType, ToyColor, ToyShape, ToySize } from 'types';
 
 export class FilterViewModel {
   private model: FilterModel;
@@ -23,8 +23,8 @@ export class FilterViewModel {
 
   private $resetFilter: HTMLButtonElement;
 
-  constructor() {
-    this.model = new FilterModel({}, () => this.update());
+  constructor(initState: DeepPartial<Filter> = {}) {
+    this.model = new FilterModel(initState);
 
     this.$searchInp = $<HTMLInputElement>('.filters__search');
     this.$favoriteBtn = $<HTMLInputElement>('.filter-favorite__option');
@@ -34,36 +34,25 @@ export class FilterViewModel {
     this.$sizeBtns = $$<HTMLInputElement>('.filter-size__option');
 
     this.$countSlider = $<Instance>('.filter-count__slider');
-    this.$yearSlider = $<Instance>('.filter-year__slider');
-
-    this.$resetFilter = $<HTMLButtonElement>('.reset-filter');
-
+    this.createRangeInput(this.$countSlider, 'count');
     $('.filter-count__max-label').textContent = `${this.model.count.max}`;
     $('.filter-count__min-label').textContent = `${this.model.count.min}`;
+
+    this.$yearSlider = $<Instance>('.filter-year__slider');
+    this.createRangeInput(this.$yearSlider, 'year');
     $('.filter-year__max-label').textContent = `${this.model.year.max}`;
     $('.filter-year__min-label').textContent = `${this.model.year.min}`;
 
-    noUiSlider.create(this.$countSlider, {
-      start: [this.model.count.min, this.model.count.max],
-      connect: true,
-      tooltips: [true, true],
-      format: {
-        to: (value) => `${Math.floor(value)}`,
-        from: (value) => Math.floor(Number(value)),
-      },
-      range: {
-        min: this.model.count.min,
-        max: this.model.count.max,
-      },
-      step: 1,
-    });
+    this.$resetFilter = $<HTMLButtonElement>('.reset-filter');
+  }
 
-    noUiSlider.create(this.$yearSlider, {
-      start: [this.model.year.min, this.model.year.max],
+  private createRangeInput(input: Instance, field: KeysOfType<Filter, Range>) {
+    noUiSlider.create(input, {
+      start: [this.model[field].min, this.model[field].max],
       connect: true,
       range: {
-        min: this.model.year.min,
-        max: this.model.year.max,
+        min: this.model[field].min,
+        max: this.model[field].max,
       },
       tooltips: [true, true],
       format: {
@@ -72,6 +61,39 @@ export class FilterViewModel {
       },
       step: 1,
     });
+  }
+
+  private initRangeInput(input: Instance, field: KeysOfType<Filter, Range>) {
+    input.noUiSlider.on('set', () => {
+      const [from, to] = (input.noUiSlider.get() as string[]).map(Number);
+      this.model.update({
+        ...this.model.filterState,
+        [field]: {
+          ...this.model[field],
+          from,
+          to,
+        },
+      });
+    });
+  }
+
+  private initCheckboxBtns($btns: HTMLInputElement[], field: KeysOfType<Filter, unknown[]>) {
+    for (const $btn of $btns) {
+      $btn.addEventListener('click', () => {
+        const { value } = $btn.dataset;
+        if (!value) return;
+
+        const state = this.model.filterState[field] as string[];
+        const i = state.indexOf(value);
+        if (i === -1) {
+          state.push(value);
+        } else {
+          state.splice(i, 1);
+        }
+
+        this.model.update(this.model.filterState);
+      });
+    }
   }
 
   init() {
@@ -80,71 +102,12 @@ export class FilterViewModel {
     });
     this.$searchInp.focus();
 
-    this.$countSlider.noUiSlider.on('set', () => {
-      const [from, to] = (this.$countSlider.noUiSlider.get() as string[]).map(Number);
-      this.model.update({
-        ...this.model.filterState,
-        count: {
-          ...this.model.count,
-          from,
-          to,
-        },
-      });
-    });
+    this.initRangeInput(this.$yearSlider, 'year');
+    this.initRangeInput(this.$countSlider, 'count');
 
-    this.$yearSlider.noUiSlider.on('set', () => {
-      const [from, to] = (this.$yearSlider.noUiSlider.get() as string[]).map(Number);
-      this.model.update({
-        ...this.model.filterState,
-        year: {
-          ...this.model.year,
-          from,
-          to,
-        },
-      });
-    });
-
-    for (const $shapeBtn of this.$shapeBtns) {
-      $shapeBtn.addEventListener('click', () => {
-        const shapeValue = $shapeBtn.getAttribute('value') as ToyShape;
-
-        const i = this.model.shape.indexOf(shapeValue);
-
-        if (i === -1) {
-          this.model.shape.push(shapeValue);
-        } else {
-          this.model.shape.splice(i, 1);
-        }
-      });
-    }
-
-    for (const $colorBtn of this.$colorBtns) {
-      $colorBtn.addEventListener('click', () => {
-        const colorValue = $colorBtn.getAttribute('value') as ToyColor;
-
-        const i = this.model.color.indexOf(colorValue);
-
-        if (i === -1) {
-          this.model.color.push(colorValue);
-        } else {
-          this.model.color.splice(i, 1);
-        }
-      });
-    }
-
-    for (const $sizeBtn of this.$sizeBtns) {
-      $sizeBtn.addEventListener('click', () => {
-        const sizeValue = $sizeBtn.getAttribute('value') as ToySize;
-
-        const i = this.model.size.indexOf(sizeValue);
-
-        if (i === -1) {
-          this.model.size.push(sizeValue);
-        } else {
-          this.model.size.splice(i, 1);
-        }
-      });
-    }
+    this.initCheckboxBtns(this.$shapeBtns, 'shape');
+    this.initCheckboxBtns(this.$colorBtns, 'color');
+    this.initCheckboxBtns(this.$sizeBtns, 'size');
 
     this.$favoriteBtn.addEventListener('click', () => {
       this.model.update({ ...this.model.filterState, favorite: !this.model.favorite });
@@ -152,14 +115,22 @@ export class FilterViewModel {
 
     this.$resetFilter.addEventListener('click', () => {
       this.model.reset();
+      this.updateUI();
     });
+
+    return this;
+  }
+
+  onChange(cb: (newState: Filter) => void) {
+    this.model.onChange(cb);
+    return this;
   }
 
   filter(toyData: IToyInfo[]) {
     return this.model.apply(toyData);
   }
 
-  update() {
+  updateUI() {
     this.$searchInp.value = this.model.name;
 
     this.$countSlider.noUiSlider.set([this.model.count.from, this.model.count.to]);
@@ -181,5 +152,7 @@ export class FilterViewModel {
     }
 
     this.$favoriteBtn.checked = this.model.favorite;
+
+    return this;
   }
 }
