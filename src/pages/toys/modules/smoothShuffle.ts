@@ -39,7 +39,6 @@ export class SmoothShuffle<T extends DataItem> {
     this.items = [];
     this.update(data);
 
-    // eslint-disable-next-line compat/compat
     const observer = new ResizeObserver(() => {
       this.getItemInfo(data[0]);
       this.getGridInfo();
@@ -65,14 +64,11 @@ export class SmoothShuffle<T extends DataItem> {
   }
 
   private moveItem(item: HTMLDivElement, idx: number) {
-    // eslint-disable-next-line no-param-reassign
     item.style.top = `${this.getYbyIdx(idx)}px`;
-    // eslint-disable-next-line no-param-reassign
     item.style.left = `${this.getXbyIdx(idx)}px`;
   }
 
   static hideItem(item: HTMLDivElement) {
-    // eslint-disable-next-line no-param-reassign
     item.style.transform = 'scale(0,0)';
   }
 

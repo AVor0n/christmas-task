@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable no-param-reassign */
 // import { message } from '../core/message';
 // import { data } from '../data';
 // import { Garland } from '../features/garland';

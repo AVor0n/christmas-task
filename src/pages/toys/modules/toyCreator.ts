@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { MAX_FAVORITE_TOYS } from '../constants';
 import { message } from '@src/modules/message';
 import type { BoxOfToys, IToyInfo } from 'types';

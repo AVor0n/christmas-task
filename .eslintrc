@@ -60,7 +60,9 @@
         "allowNamedExports": false
       }
     ],
+    "no-param-reassign": "warn",
     "eslint-comments/disable-enable-pair": ["error", { "allowWholeFile": true }],
+    "eslint-comments/no-unused-disable": "error",
     "no-plusplus": "off",
     "unicorn/no-null": "off",
     "object-curly-newline": "off",
